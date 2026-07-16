@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node dev-server.mjs"
+    "dev": "node dev-server.mjs",
+    "check": "node --check app.js && node --check admin.js && node --check config.js && node --check dev-server.mjs",
+    "test": "node --test --test-concurrency=1",
+    "test:e2e": "node tests/e2e-local.mjs",
+    "verify": "npm run check && npm test && npm run test:e2e"
   },
   "dependencies": {
-    "@vercel/blob": "^0.27.0"
+    "@vercel/blob": "^2.6.1"
   }
 }

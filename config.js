@@ -48,7 +48,16 @@ window.vpFetchConfig = async function () {
 window.vpIcon = (name, cls) =>
   `<svg${cls ? ` class="${cls}"` : ""} viewBox="0 0 24 24" aria-hidden="true"><path d="${window.VP_ICONS[name] || window.VP_ICONS.site}"/></svg>`;
 
-window.vpWaLink = (cfg, msg) =>
-  `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg)}`;
+/* A página intermediária do WhatsApp pode corromper alguns emojis em certos
+   navegadores. Removemos pictogramas e caracteres inválidos só da mensagem
+   enviada, preservando acentos, pontuação e o texto configurado no painel. */
+window.vpWaLink = (cfg, msg) => {
+  const safeMsg = String(msg ?? "")
+    .replace(/\uFFFD/g, "")
+    .replace(/\p{Extended_Pictographic}/gu, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(safeMsg)}`;
+};
 
 window.vpBRL = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

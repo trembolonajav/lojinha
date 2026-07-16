@@ -15,7 +15,12 @@ export default async function handler(req, res) {
     if (query(req).get("defaults") === "1") {
       return send(res, 200, JSON.parse(JSON.stringify(DEFAULT_CONFIG)));
     }
-    return send(res, 200, await getConfig());
+    try {
+      return send(res, 200, await getConfig());
+    } catch (error) {
+      console.error("admin_config_read_failed", error);
+      return send(res, 503, { error: "Armazenamento temporariamente indisponível." });
+    }
   }
 
   if (req.method === "PUT") {
@@ -29,8 +34,13 @@ export default async function handler(req, res) {
     try { clean = sanitizeConfig(body); }
     catch (e) { return send(res, 422, { error: e.message }); }
 
-    await setConfig(clean);
-    return send(res, 200, clean);
+    try {
+      await setConfig(clean);
+      return send(res, 200, clean);
+    } catch (error) {
+      console.error("admin_config_write_failed", error);
+      return send(res, 503, { error: "Não foi possível gravar no armazenamento." });
+    }
   }
 
   send(res, 405, { error: "Método não permitido." });

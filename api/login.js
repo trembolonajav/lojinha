@@ -1,7 +1,7 @@
 /* POST /api/login — autentica e grava o cookie de sessão. */
 
 import { send, readJson, sameOrigin, clientIp } from "./_lib/http.mjs";
-import { credentialsOk, makeSession, sessionCookie, SESSION_MAX_AGE } from "./_lib/auth.mjs";
+import { authConfigured, credentialsOk, makeSession, sessionCookie, SESSION_MAX_AGE } from "./_lib/auth.mjs";
 
 /* Rate-limit best-effort por IP (vive enquanto a instância estiver quente).
    8 erros em 15 minutos => bloqueia por 15 minutos. */
@@ -40,13 +40,12 @@ export default async function handler(req, res) {
   try { body = await readJson(req, 10 * 1024); }
   catch { return send(res, 400, { error: "Corpo inválido." }); }
 
-  const ok = credentialsOk(body.user, body.pass);
-
-  if (ok === null) {
+  if (!authConfigured()) {
     return send(res, 503, {
-      error: "Login não configurado: defina ADMIN_USER e ADMIN_PASS nas variáveis de ambiente."
+      error: "Login não configurado: defina ADMIN_USER, ADMIN_PASS e SESSION_SECRET."
     });
   }
+  const ok = credentialsOk(body.user, body.pass);
 
   if (!ok) {
     registerFail(ip);

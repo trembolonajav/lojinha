@@ -57,9 +57,12 @@ export function query(req) {
    precisa bater com o host que atendeu a requisição. */
 export function sameOrigin(req) {
   const origin = req.headers.origin;
-  if (!origin) return true;
+  if (!origin) return !process.env.VERCEL;
   const host = req.headers["x-forwarded-host"] || req.headers.host || "";
-  try { return new URL(origin).host === host; } catch { return false; }
+  try {
+    const parsed = new URL(origin);
+    return parsed.host === host && (parsed.protocol === "https:" || !process.env.VERCEL);
+  } catch { return false; }
 }
 
 export function clientIp(req) {

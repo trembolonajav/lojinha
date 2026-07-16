@@ -9,7 +9,7 @@ export const ICON_KEYS = [
 
 export const DEFAULT_CONFIG = {
   whatsapp: "5547988930280",
-  msgNegociar: "Olá, VP Store! 💎 Vim pelo site e quero negociar diamantes.",
+  msgNegociar: "Olá, VP Store! Vim pelo site e quero negociar diamantes.",
 
   banners: [
     {

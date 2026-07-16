@@ -41,7 +41,12 @@ export default async function handler(req, res) {
     return send(res, 415, { error: "Formato não aceito — envie PNG, JPG, WebP ou GIF." });
   }
 
-  const name = `img-${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${kind.ext}`;
-  const url = await putImage(name, buf, kind.mime);
-  send(res, 200, { url });
+  const name = `img-${Date.now()}-${crypto.randomBytes(8).toString("hex")}.${kind.ext}`;
+  try {
+    const url = await putImage(name, buf, kind.mime);
+    send(res, 200, { url });
+  } catch (error) {
+    console.error("image_upload_failed", error);
+    send(res, 503, { error: "Armazenamento de imagens temporariamente indisponível." });
+  }
 }

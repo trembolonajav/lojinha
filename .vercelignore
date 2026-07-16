@@ -1,0 +1,13 @@
+.git
+.agents
+.data
+.env
+.env.*
+!.env.example
+node_modules
+assets/originais
+banner de jogo
+*.zip
+tests
+coverage
+*.log

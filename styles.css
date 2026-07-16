@@ -134,6 +134,12 @@ a:hover > .logo{filter:brightness(1.15)}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 22px rgba(37,211,102,.16);
 }
 .btn-whats:hover{filter:brightness(1.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 26px rgba(37,211,102,.26)}
+.btn-whats[data-wa] svg{
+  width:24px;height:24px;padding:4px;
+  color:#118c45;background:rgba(255,255,255,.94);
+  border-radius:50%;
+  box-shadow:0 2px 7px rgba(7,19,11,.18);
+}
 
 /* ------------------------------------------------ page scaffolding */
 .page{padding:34px 0 90px}
@@ -173,6 +179,8 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:700}
 /* ------------------------------------------------ carrossel */
 .carousel{
   position:relative;
+  width:min(100%,1040px);
+  margin-inline:auto;
   border-radius:var(--radius-lg);
   overflow:hidden;
   border:1px solid var(--line-strong);
@@ -429,7 +437,11 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:700}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 30px rgba(23,160,77,.28);
   transition:transform .2s var(--ease),filter .2s;
 }
-.cta svg{width:20px;height:20px;fill:currentColor}
+.cta svg{
+  width:32px;height:32px;padding:6px;flex:none;
+  fill:#118c45;background:#fff;border-radius:50%;
+  box-shadow:0 3px 9px rgba(7,19,11,.2);
+}
 .cta:hover{transform:translateY(-2px);filter:brightness(1.06)}
 .safe{
   display:flex;justify-content:center;align-items:center;gap:7px;
@@ -542,7 +554,7 @@ footer{
   .btn-icon-label{padding:10px 13px;font-size:12px}
   .page{padding-top:22px}
   .section{margin-top:48px}
-  .carousel{border-radius:14px}
+  .carousel{width:100%;border-radius:14px}
   .carousel-btn{display:none}
   .dots{bottom:10px}
   .games-grid{grid-template-columns:repeat(auto-fit,minmax(210px,290px))}

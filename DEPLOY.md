@@ -29,7 +29,7 @@ No projeto na Vercel: **Settings > Environment Variables**, adicione:
 | `SESSION_SECRET`| qualquer frase longa e aleatória               |
 
 ### 4. Crie o armazenamento (Blob)
-1. Na aba **Storage** do projeto: **Create Database > Blob** (plano free).
+1. Na aba **Storage** do projeto: **Create Database > Blob**.
 2. **Connect Project** → escolha o projeto `vp-store`.
    Isso cria sozinho a variável `BLOB_READ_WRITE_TOKEN`.
 
@@ -39,11 +39,12 @@ Em **Deployments**, menu **⋯ > Redeploy** (para as variáveis valerem).
 ### 6. Pronto — teste
 - Site: `https://seu-projeto.vercel.app`
 - Painel: `https://seu-projeto.vercel.app/admin.html` (login = ADMIN_USER/ADMIN_PASS)
-- Troque um banner, salve, recarregue o site em outra aba/celular: mudou para todos.
+- Troque um banner, salve e recarregue o site em outra aba/celular. A propagação
+  do Blob pode levar até 1 minuto.
 
 ## Dia a dia
 - Banners, jogos, preços, contatos e WhatsApp: tudo pelo `/admin.html`.
-  Nada de mexer em código — **Salvar e publicar** já atualiza o site.
+  Nada de mexer em código — **Salvar e publicar** atualiza o site.
 - Deploy novo só é preciso quando alterar o CÓDIGO (HTML/CSS/JS):
   `git add -A && git commit -m "..." && git push` → a Vercel publica sozinha.
 
@@ -66,6 +67,30 @@ Abre http://127.0.0.1:8736 — funciona igual à Vercel (dados ficam na pasta .d
 - Tudo que o painel salva é validado no servidor (preços não-negativos,
   URLs seguras, textos limpos) e o site escapa tudo ao renderizar (anti-XSS).
 - Headers de segurança (CSP etc.) em `vercel.json`.
+- Configure no Firewall da Vercel uma regra de rate limit para `/api/login`
+  (por exemplo, 10 requisições por IP a cada minuto).
+- Trocar `ADMIN_USER`, `ADMIN_PASS` ou `SESSION_SECRET` invalida as sessões antigas.
+
+## Plano da Vercel
+
+Tecnicamente o projeto cabe com folga nos limites gratuitos para tráfego pequeno.
+Porém, a Vercel descreve o plano Hobby como destinado a uso pessoal e não
+comercial. Como este site é uma loja, confirme os termos vigentes e use o plano
+Pro quando o projeto entrar em operação comercial.
+
+No Hobby, se a franquia do Blob for excedida, o armazenamento pode ficar
+indisponível até a renovação da franquia. Monitore Storage e Usage no painel.
+
+## Validação do Preview antes de promover para produção
+
+1. Abra `/api/config` e confirme resposta JSON.
+2. Entre em `/admin.html` com as variáveis do ambiente Preview.
+3. Envie uma imagem WebP pequena.
+4. Troque um banner e clique em **Salvar e publicar**.
+5. Abra o site em janela anônima e confirme a mudança após até 1 minuto.
+6. Saia do painel e confirme que `/api/admin/config` retorna `401`.
+7. Troque `ADMIN_PASS`, faça redeploy e confirme que o cookie anterior perdeu acesso.
+8. Confira Functions Logs e Blob Usage no dashboard.
 
 Limite honesto: qualquer pessoa pode alterar a PRÓPRIA tela com o F12 do
 navegador (isso vale para qualquer site do mundo). Mas isso não muda o site

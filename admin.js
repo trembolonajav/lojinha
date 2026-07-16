@@ -368,7 +368,7 @@ $("#save-btn").addEventListener("click", async () => {
   cfg = res.data;   // versão sanitizada pelo servidor
   dirty = false;
   render();
-  toast("Publicado! O site já está atualizado para todos.");
+  toast("Publicado! A atualização pode levar até 1 minuto para aparecer para todos.");
 });
 
 $("#export-btn").addEventListener("click", () => {

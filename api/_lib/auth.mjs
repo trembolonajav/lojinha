@@ -8,11 +8,10 @@ const SESSION_HOURS = 12;
 
 function secret() {
   if (process.env.SESSION_SECRET) return process.env.SESSION_SECRET;
-  // fallback: deriva do ADMIN_PASS para não quebrar se esquecerem a env
-  if (process.env.ADMIN_PASS) {
-    return crypto.createHash("sha256").update("vp-fallback:" + process.env.ADMIN_PASS).digest("hex");
+  if (!process.env.VERCEL && process.env.ADMIN_PASS) {
+    return crypto.createHash("sha256").update("vp-local:" + process.env.ADMIN_PASS).digest("hex");
   }
-  return "dev-secret-local";
+  return null;
 }
 
 /* Comparação em tempo constante (hash primeiro para igualar tamanhos). */
@@ -34,15 +33,29 @@ export function credentialsOk(user, pass) {
 
 const hmac = (data) => crypto.createHmac("sha256", secret()).update(data).digest("base64url");
 
+function credentialVersion() {
+  return crypto.createHash("sha256")
+    .update(`${process.env.ADMIN_USER || ""}\0${process.env.ADMIN_PASS || ""}\0${secret() || ""}`)
+    .digest("base64url")
+    .slice(0, 22);
+}
+
+export function authConfigured() {
+  return Boolean(process.env.ADMIN_USER && process.env.ADMIN_PASS && secret());
+}
+
 export function makeSession(user) {
+  if (!authConfigured()) throw new Error("Autenticação não configurada.");
   const payload = Buffer.from(JSON.stringify({
     u: user,
+    v: credentialVersion(),
     exp: Date.now() + SESSION_HOURS * 3600 * 1000
   })).toString("base64url");
   return `${payload}.${hmac(payload)}`;
 }
 
 export function sessionUser(token) {
+  if (!authConfigured()) return null;
   if (!token || !token.includes(".")) return null;
   const dot = token.lastIndexOf(".");
   const payload = token.slice(0, dot);
@@ -50,7 +63,7 @@ export function sessionUser(token) {
   if (!safeEq(sig, hmac(payload))) return null;
   try {
     const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf-8"));
-    if (!data.exp || data.exp < Date.now()) return null;
+    if (!data.exp || data.exp < Date.now() || data.v !== credentialVersion()) return null;
     return data.u || null;
   } catch { return null; }
 }

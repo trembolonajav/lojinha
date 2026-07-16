@@ -12,7 +12,7 @@ window.VP_DEFAULT_CONFIG = {
   whatsapp: "5547988930280",
 
   /* Mensagem do botão "Negociar" do topo e dos atalhos de WhatsApp */
-  msgNegociar: "Olá, VP Store! 💎 Vim pelo site e quero negociar diamantes.",
+  msgNegociar: "Olá, VP Store! Vim pelo site e quero negociar diamantes.",
 
   /* Banners do carrossel da página inicial */
   banners: [

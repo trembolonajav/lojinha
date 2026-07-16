@@ -203,7 +203,7 @@ if (quantity) {
       const preco = mode === "buy" ? game.precoCompra : game.precoVenda;
       const acao = mode === "buy" ? "COMPRAR" : "VENDER";
       const msg =
-        `Olá, VP Store! 💎 Quero ${acao} ${n} ${game.item.toLowerCase()} do ${game.nome} ` +
+        `Olá, VP Store! Quero ${acao} ${n} ${game.item.toLowerCase()} do ${game.nome} ` +
         `(${vpBRL(preco)}/${game.unidade} — total ${vpBRL(n * preco)}).`;
       window.open(vpWaLink(CFG, msg), "_blank", "noopener");
     });

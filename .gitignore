@@ -8,3 +8,5 @@ banner de jogo/
 *.zip
 UMAMI.txt
 .data-dev.log
+coverage/
+.env.test
