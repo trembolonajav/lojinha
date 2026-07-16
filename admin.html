@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VP Store — Painel do administrador</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0a0605">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <nav class="container nav-shell" aria-label="Painel">
+    <a href="index.html" aria-label="VP Store — Início">
+      <img class="logo" src="assets/logo-vp-store-horizontal.webp" alt="VP Store">
+    </a>
+    <div></div>
+    <div class="header-actions">
+      <a class="btn-icon-label btn-twitch" href="index.html" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3Z"/></svg>
+        <span>Ver o site</span>
+      </a>
+      <button class="btn-icon-label btn-whats" id="logout-btn" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-8v2h8v14h-8v2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/></svg>
+        Sair
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main class="admin-main">
+
+  <!-- ===================== LOGIN ===================== -->
+  <section id="login-view" hidden>
+    <div class="login-card a-card">
+      <img src="assets/logo-vp-store-quadrada.webp" alt="" class="login-brand">
+      <div class="a-title" style="text-align:center">Área do administrador</div>
+      <p class="login-sub">Acesso restrito. Entre com o usuário e a senha configurados no servidor.</p>
+      <form id="login-form" autocomplete="off">
+        <div class="a-field">
+          <label for="login-user">Usuário</label>
+          <input type="text" id="login-user" autocomplete="username" required>
+        </div>
+        <div class="a-field" style="margin-top:12px">
+          <label for="login-pass">Senha</label>
+          <input type="password" id="login-pass" autocomplete="current-password" required>
+        </div>
+        <div class="login-err" id="login-err" hidden></div>
+        <button class="a-btn primary" id="login-btn" type="submit" style="width:100%;margin-top:18px;padding:14px">Entrar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== PAINEL ===================== -->
+  <section id="admin-view" hidden>
+    <div class="admin-head">
+      <div>
+        <span class="kicker">Área restrita</span>
+        <h1>Painel do administrador</h1>
+      </div>
+    </div>
+
+    <div class="admin-hint">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5Zm-1 6h2v6h-2Zm0 8h2v2h-2Z"/></svg>
+      <div>
+        As mudanças são salvas <strong>no servidor</strong>: ao clicar em
+        <strong>Salvar e publicar</strong>, o site atualiza na hora para todos os visitantes.
+      </div>
+    </div>
+
+    <div class="admin-tabs" role="tablist">
+      <button class="admin-tab active" data-tab="banners">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H3V5h18zM8.5 12.5l2.5 3 3.5-4.5 4.5 6H5z"/></svg>
+        Banners
+      </button>
+      <button class="admin-tab" data-tab="jogos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.58 16.09l-1.09-7.66A4 4 0 0 0 16.53 5H7.47a4 4 0 0 0-3.96 3.43l-1.09 7.66A2.98 2.98 0 0 0 5.38 19.5c.79 0 1.54-.31 2.11-.87L9.55 16.5h4.9l2.06 2.13c.57.56 1.32.87 2.11.87a2.98 2.98 0 0 0 2.96-3.41zM9 11H7v2H5.5v-2h-2V9.5h2v-2H7v2h2zm7.75 1.5a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm2.5-3a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
+        Jogos e preços
+      </button>
+      <button class="admin-tab" data-tab="contatos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3Zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3Zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13Zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 1.9 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5Z"/></svg>
+        Contatos
+      </button>
+      <button class="admin-tab" data-tab="geral">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.63l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.2 7.2 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.13.55-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.85a.5.5 0 0 0 .12.63l2.03 1.58a7.07 7.07 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.63l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.49.39 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54a7.2 7.2 0 0 0 1.62-.94l2.39.96c.21.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.63zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+        Geral
+      </button>
+    </div>
+
+    <div id="panel"></div>
+
+    <div class="a-actions">
+      <button class="a-btn primary" id="save-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10z"/></svg>
+        Salvar e publicar
+      </button>
+      <span class="spacer"></span>
+      <button class="a-btn small" id="export-btn">Backup</button>
+      <button class="a-btn small" id="import-btn">Importar</button>
+      <button class="a-btn small danger" id="reset-btn">Restaurar padrão</button>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="dados.js"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

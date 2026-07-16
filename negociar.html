@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VP Store — Comprar e vender diamonds do PokeIdle</title>
+<meta name="description" content="Compre ou venda diamonds do PokeIdle World com segurança. Escolha a quantidade e finalize direto no WhatsApp da VP Store.">
+<meta name="theme-color" content="#0a0605">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <span class="live-dot" aria-hidden="true"></span>
+  <span>Live todos os dias, das 18h às 22h, na&nbsp;<a href="https://www.twitch.tv/vpertsz" target="_blank" rel="noreferrer">twitch.tv/vpertsz</a></span>
+</div>
+
+<header>
+  <nav class="container nav-shell" aria-label="Navegação principal">
+    <a href="index.html" aria-label="VP Store — Início">
+      <img class="logo" src="assets/logo-vp-store-horizontal.webp" alt="VP Store">
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Início</a>
+      <a class="nav-link" href="jogos.html">Jogos</a>
+      <a class="nav-link active" href="negociar.html">Comprar &amp; Vender</a>
+      <a class="nav-link" href="contato.html">Contato</a>
+    </div>
+    <div class="header-actions">
+      <a class="btn-icon-label btn-twitch" href="https://www.twitch.tv/vpertsz" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+        <span>Assistir live</span>
+      </a>
+      <a class="btn-icon-label btn-whats" href="#" data-wa>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Negociar
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="container">
+
+    <div class="section-head center">
+      <div>
+        <span class="kicker">PokeIdle World</span>
+        <h1>Diamantes — compra e venda com segurança</h1>
+        <p class="section-sub">Escolha a operação e a quantidade. Você finaliza direto no WhatsApp, sem cadastro.</p>
+        <div class="ornament" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="trade-layout" id="negociacao">
+
+      <aside class="trade-side">
+        <img class="diamond" id="g-icon" src="assets/diamante-pokeidle.webp" alt="Item do jogo">
+        <div>
+          <span class="game-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 2 9l10 13L22 9Z"/></svg>
+            <span id="g-nome">PokeIdle World</span>
+          </span>
+          <h2 id="g-item">Diamonds</h2>
+          <p class="rate" id="g-rates"></p>
+        </div>
+      </aside>
+
+      <section class="trade-panel" aria-label="Negociação de diamonds">
+        <div class="tabs" role="tablist">
+          <button class="tab active" role="tab" data-mode="buy" aria-selected="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2ZM7.2 14.8c0 .1.1.2.3.2H19v2H7c-1.1 0-2-.9-2-2 0-.4.1-.7.2-1l1.3-2.4L3 4H1V2h3.3l.9 2H21c.6 0 1 .4 1 1 0 .2 0 .3-.1.5l-3.6 6.5c-.3.6-1 1-1.7 1H8.5Z"/></svg>
+            Comprar
+          </button>
+          <button class="tab" role="tab" data-mode="sell" aria-selected="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.4 11.6-9-9C12 2.2 11.5 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .5.2 1 .6 1.4l9 9c.4.4.9.6 1.4.6s1-.2 1.4-.6l7-7c.4-.4.6-.9.6-1.4s-.2-1-.6-1.4ZM6.5 8C5.7 8 5 7.3 5 6.5S5.7 5 6.5 5 8 5.7 8 6.5 7.3 8 6.5 8Z"/></svg>
+            Vender
+          </button>
+        </div>
+
+        <div class="field-label">
+          <span>Quantidade</span>
+          <output id="quantity-label" for="quantity">100 diamonds</output>
+        </div>
+        <div class="counter">
+          <button id="minus" type="button" aria-label="Diminuir quantidade">−</button>
+          <input id="quantity" type="number" inputmode="numeric" min="1" max="1000" step="1" value="100" aria-label="Quantidade">
+          <button id="plus" type="button" aria-label="Aumentar quantidade">+</button>
+        </div>
+        <div class="chips" aria-label="Quantidades rápidas">
+          <button class="chip" type="button" data-value="50">50</button>
+          <button class="chip" type="button" data-value="100">100</button>
+          <button class="chip" type="button" data-value="250">250</button>
+          <button class="chip" type="button" data-value="500">500</button>
+          <button class="chip" type="button" data-value="1000">1000</button>
+        </div>
+        <input class="range" id="range" type="range" min="1" max="1000" step="1" value="100" aria-label="Ajustar quantidade">
+        <div class="range-labels"><span>1</span><span>250</span><span>500</span><span>750</span><span>1000</span></div>
+
+        <div class="quote">
+          <span id="quote-label">Cotação de compra</span>
+          <strong id="quote-value"></strong>
+        </div>
+
+        <div class="total">
+          <span id="total-prefix">Você pagará</span>
+          <strong id="total"></strong>
+        </div>
+
+        <button class="cta" id="cta" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.6 9.6 0 0 0-8.2 14.6L2.5 22l5.5-1.3A9.8 9.8 0 1 0 12 2Zm0 17.5a7.5 7.5 0 0 1-3.8-1l-.4-.2-3.1.8.8-3-.2-.4a7.6 7.6 0 1 1 13.9-4.2 7.5 7.5 0 0 1-7.2 8Zm4.2-5.6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.2 6.2 0 0 1-3-2.6c-.2-.3.2-.4.5-1 .1-.2 0-.4 0-.5l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.5 3.8 1.7.7 2.4.8 3.3.7 1-.2 1.4-.7 1.6-1.3.2-.6.2-1.1.1-1.2-.1-.2-.2-.2-.4-.3Z"/></svg>
+          <span id="cta-label">Comprar via WhatsApp</span>
+        </button>
+        <p class="safe">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5Zm-1.4 15.4-3.9-3.9 1.6-1.6 2.3 2.3 5.1-5.1 1.6 1.6Z"/></svg>
+          Transação 100% acompanhada — pagamento e entrega confirmados no atendimento oficial.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 VP Store — todos os direitos reservados.</span>
+      <div class="footer-links" style="display:flex;gap:18px">
+        <a href="index.html">Início</a>
+        <a href="jogos.html">Jogos</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="dados.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

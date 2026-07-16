@@ -1,0 +1,9 @@
+node_modules/
+.data/
+.env
+.env.local
+.vercel/
+assets/originais/
+banner de jogo/
+*.zip
+UMAMI.txt
