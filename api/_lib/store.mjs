@@ -12,7 +12,15 @@ const CACHE_MS = 30 * 1000;
 let memoryConfig = null;
 let memoryUntil = 0;
 
-const useBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+/* Em produção nunca usamos o filesystem efêmero da Function.
+   Stores antigos usam BLOB_READ_WRITE_TOKEN; conexões novas podem usar
+   OIDC + BLOB_STORE_ID, com o token entregue pela própria Vercel. */
+const useBlob = () => Boolean(
+  process.env.VERCEL ||
+  process.env.BLOB_READ_WRITE_TOKEN ||
+  process.env.BLOB_STORE_ID ||
+  process.env.VERCEL_OIDC_TOKEN
+);
 const clone = (o) => JSON.parse(JSON.stringify(o));
 const normalizeLegacyText = (cfg) => {
   const out = clone(cfg);

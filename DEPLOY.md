@@ -31,7 +31,9 @@ No projeto na Vercel: **Settings > Environment Variables**, adicione:
 ### 4. Crie o armazenamento (Blob)
 1. Na aba **Storage** do projeto: **Create Database > Blob**.
 2. **Connect Project** → escolha o projeto `vp-store`.
-   Isso cria sozinho a variável `BLOB_READ_WRITE_TOKEN`.
+   Isso configura automaticamente a autenticação do Blob. Conexões novas usam
+   OIDC e podem criar `BLOB_STORE_ID`; conexões antigas usam
+   `BLOB_READ_WRITE_TOKEN`.
 
 ### 5. Redeploy
 Em **Deployments**, menu **⋯ > Redeploy** (para as variáveis valerem).

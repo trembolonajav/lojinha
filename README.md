@@ -127,10 +127,11 @@ Variáveis obrigatórias:
 | `ADMIN_USER` | Usuário do painel |
 | `ADMIN_PASS` | Senha forte do painel |
 | `SESSION_SECRET` | Assinatura das sessões |
-| `BLOB_READ_WRITE_TOKEN` | Acesso ao Vercel Blob |
+| Credencial do Blob | Criada automaticamente ao conectar o Vercel Blob |
 
-O token do Blob é criado automaticamente ao criar o armazenamento e conectá-lo
-ao projeto.
+Conexões novas normalmente usam OIDC e `BLOB_STORE_ID`. Conexões antigas podem
+usar `BLOB_READ_WRITE_TOKEN`. Não crie nem copie essas credenciais manualmente:
+conecte o armazenamento ao projeto pelo painel da Vercel.
 
 O roteiro completo de publicação e validação está em [DEPLOY.md](DEPLOY.md).
 
