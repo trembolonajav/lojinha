@@ -96,13 +96,17 @@ test("mensagem do WhatsApp preserva acentos na URL", () => {
 });
 
 test("arquivos públicos não contêm caractere Unicode de substituição", () => {
+  const publicRoot = path.join(process.cwd(), "apps", "vpertz-store", "public");
   const files = [
-    "index.html", "jogos.html", "negociar.html", "contato.html", "admin.html",
-    "app.js", "admin.js", "config.js", "dados.js", "styles.css",
+    "index.html", "jogos.html", "negociar.html", "contato.html", "pokefipe.html", "admin.html",
+    "app.js", "pokefipe.js", "pokefipe-core.js", "admin.js", "config.js", "dados.js", "styles.css",
     "api/_lib/defaults.mjs", "api/_lib/validate.mjs"
   ];
   for (const file of files) {
-    const content = fs.readFileSync(path.join(process.cwd(), file), "utf8");
+    const source = file.startsWith("api/")
+      ? path.join(process.cwd(), file)
+      : path.join(publicRoot, file);
+    const content = fs.readFileSync(source, "utf8");
     assert.equal(content.includes("\uFFFD"), false, `${file} contém caractere corrompido`);
   }
 });

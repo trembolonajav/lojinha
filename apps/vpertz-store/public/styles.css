@@ -570,6 +570,93 @@ footer{
 }
 
 /* ============================================================
+   POKEFIPE
+   ============================================================ */
+.fipe-page{padding-top:42px}
+.fipe-hero{
+  display:grid;grid-template-columns:220px minmax(0,760px);align-items:center;gap:34px;
+  margin-bottom:30px;padding:30px 34px;
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  background:linear-gradient(125deg,rgba(31,17,14,.96),rgba(12,7,6,.92));
+  box-shadow:var(--shadow-soft);overflow:hidden;position:relative;
+}
+.fipe-hero::after{
+  content:"";position:absolute;right:-100px;top:-150px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(194,54,41,.18),transparent 68%);pointer-events:none;
+}
+.fipe-hero h1{font-size:clamp(28px,4vw,44px);max-width:760px}
+.fipe-hero p{color:var(--muted);max-width:690px;margin:12px 0 0;font-size:14.5px}
+.fipe-mark{
+  width:220px;aspect-ratio:1;display:grid;place-items:center;
+  position:relative;z-index:1;
+}
+.fipe-mark img{
+  width:100%;height:100%;display:block;object-fit:contain;
+  filter:drop-shadow(0 18px 25px rgba(0,0,0,.42));
+}
+
+.fipe-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:22px;align-items:stretch}
+.fipe-card{
+  padding:26px;border:1px solid var(--line);border-radius:var(--radius-lg);
+  background:linear-gradient(160deg,rgba(30,18,16,.96),rgba(11,7,6,.96));
+  box-shadow:var(--shadow-soft);
+}
+.fipe-card-title{display:flex;align-items:center;gap:13px;padding-bottom:18px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.fipe-card-title>div{display:grid}.fipe-card-title strong{font:700 16px/1.3 Cinzel,serif;color:var(--cream)}
+.fipe-card-title small{color:var(--faint);font-size:11px;margin-top:3px}
+.fipe-step{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:rgba(194,54,41,.13);border:1px solid rgba(226,75,53,.35);color:var(--gold);font-size:11px;font-weight:800}
+.fipe-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fipe-field{display:grid;align-content:start;gap:7px}
+.fipe-field-wide{grid-column:1/-1}
+.fipe-field>span{color:#d8c5b9;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.fipe-field input,.fipe-field select{
+  width:100%;height:48px;padding:0 14px;border:1px solid var(--line);border-radius:11px;
+  background:#0a0605;color:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.fipe-field input:focus,.fipe-field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(229,179,79,.09)}
+.fipe-field small{color:var(--faint);font-size:10.5px}.fipe-field small b{color:var(--gold-soft)}
+.fipe-actions{display:flex;gap:10px;margin-top:22px}
+.fipe-calculate,.fipe-clear{height:48px;border-radius:11px;border:1px solid transparent;cursor:pointer;font-weight:800;transition:transform .2s,filter .2s,background .2s}
+.fipe-calculate{flex:1;color:#fff;background:linear-gradient(180deg,#d84433,#941f1a);box-shadow:0 10px 24px rgba(194,54,41,.2)}
+.fipe-clear{padding:0 20px;color:var(--muted);background:rgba(255,255,255,.04);border-color:var(--line)}
+.fipe-calculate:hover,.fipe-clear:hover{transform:translateY(-2px);filter:brightness(1.08)}
+
+.fipe-output{min-height:100%;display:flex;flex-direction:column}
+.fipe-empty{flex:1;min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--faint)}
+.fipe-empty strong{color:#d8c5b9;margin:14px 0 3px}.fipe-empty span{font-size:12px}
+.fipe-empty-logo{
+  width:150px;height:150px;object-fit:contain;
+  opacity:.42;filter:grayscale(.2) drop-shadow(0 14px 24px rgba(0,0,0,.38));
+}
+.fipe-result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.fipe-result-head>span{font:700 20px Cinzel,serif;color:var(--gold)}
+.fipe-result-head small{color:var(--faint)}.fipe-result-head b{color:var(--cream)}
+.fipe-total{padding:22px;border-radius:16px;border:1px solid rgba(229,179,79,.36);background:linear-gradient(145deg,rgba(194,54,41,.16),rgba(229,179,79,.07));display:grid}
+.fipe-total span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800}
+.fipe-total strong{font:800 clamp(25px,4vw,36px) Cinzel,serif;color:var(--cream);margin:5px 0}
+.fipe-total small{color:var(--faint);font-size:10.5px}
+.fipe-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.fipe-breakdown>div{padding:15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);display:grid;gap:4px}
+.fipe-breakdown>div:last-child{grid-column:1/-1}
+.fipe-breakdown span{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em}
+.fipe-breakdown strong{color:#ead8cb;font-size:15px}
+.fipe-warning{margin:auto 0;padding:20px;border:1px solid rgba(229,179,79,.35);border-radius:14px;background:rgba(229,179,79,.06);display:grid;gap:6px}
+.fipe-warning strong{color:var(--gold)}.fipe-warning span{color:#d8c5b9;font-size:13px}.fipe-warning small{color:var(--faint)}
+.fipe-info{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.fipe-info>div{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:rgba(15,9,8,.86);display:grid;gap:4px}
+.fipe-info span{color:var(--gold-soft);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
+.fipe-info strong{font-size:14px}.fipe-info small{font-size:10.5px;color:var(--faint)}
+
+@media(max-width:1100px){
+  .fipe-layout{grid-template-columns:1fr}.fipe-output{min-height:460px}
+}
+@media(max-width:700px){
+  .fipe-page{padding-top:22px}.fipe-hero{grid-template-columns:1fr;padding:24px;text-align:center;justify-items:center}.fipe-mark{width:180px}
+  .fipe-card{padding:20px}.fipe-fields{grid-template-columns:1fr}.fipe-field-wide{grid-column:auto}.fipe-actions{flex-direction:column}.fipe-clear{width:100%}
+  .fipe-breakdown{grid-template-columns:1fr}.fipe-breakdown>div:last-child{grid-column:auto}.fipe-info{grid-template-columns:1fr}.fipe-output{min-height:420px}
+}
+
+/* ============================================================
    PAINEL ADMIN (admin.html)
    ============================================================ */
 .admin-main{width:min(960px,calc(100% - 36px));margin:0 auto;padding:30px 0 90px}

@@ -48,6 +48,14 @@ try {
   const home = await fetch(base);
   assert.equal(home.status, 200);
 
+  const lab = await fetch(`${base}/vplab/`);
+  assert.equal(lab.status, 200);
+  assert.match(await lab.text(), /VPLab/);
+
+  const pokeFipe = await fetch(`${base}/pokefipe.html`);
+  assert.equal(pokeFipe.status, 200);
+  assert.match(await pokeFipe.text(), /PokeFipe/);
+
   const login = await json(`${base}/api/login`, {
     method: "POST",
     headers: {
@@ -66,7 +74,7 @@ try {
   assert.equal(current.response.status, 200);
   const original = current.data;
 
-  const image = await fs.readFile(path.join(process.cwd(), "assets", "diamante-pokeidle.webp"));
+  const image = await fs.readFile(path.join(process.cwd(), "apps", "vpertz-store", "public", "assets", "diamante-pokeidle.webp"));
   const upload = await json(`${base}/api/admin/upload`, {
     method: "POST",
     headers: { ...authHeaders, "Content-Type": "image/webp" },
@@ -110,7 +118,7 @@ try {
   });
   assert.equal(afterLogout.status, 401);
 
-  console.log("E2E local: home, login, upload, publicação, leitura, restauração e logout OK.");
+  console.log("E2E local: Store, PokeFipe, VPLab, login, upload, publicação, restauração e logout OK.");
 } finally {
   child.kill();
   if (uploadedFile) await fs.rm(uploadedFile, { force: true });

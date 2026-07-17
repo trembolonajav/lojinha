@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VPLab — Ferramentas do PokeIdle World</title>
+<meta name="description" content="VPLab, a bancada da VP Store para o PokeIdle World: avalie IV e qualidade do seu Pokémon, monte a rota de caça ideal e domine o sistema de clãs. Dados oficiais da Pokepedia.">
+<meta name="theme-color" content="#0a0605">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <span class="live-dot" aria-hidden="true"></span>
+  <span>Ferramenta oficial da <b>VP Store</b> — live todos os dias na&nbsp;<a href="https://www.twitch.tv/vpertsz" target="_blank" rel="noreferrer">twitch.tv/vpertsz</a></span>
+</div>
+
+<header>
+  <nav class="container nav-shell" aria-label="Navegação principal">
+    <a class="logo-lockup" href="#" id="home-link" aria-label="VPLab — início">
+      <img src="assets/logo-vplab.webp" alt="VPLab">
+      <span class="word"><strong>VPLab</strong><span>PokeIdle World</span></span>
+    </a>
+    <div class="main-tabs" role="tablist">
+      <button class="main-tab" role="tab" data-tab="perfil" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 7.75 6H15.9a4 4 0 0 0-7.8 0H4.25A8 8 0 0 1 12 4zm0 10.5A2.5 2.5 0 1 1 12 9.5a2.5 2.5 0 0 1 0 5zM4.25 14h3.85a4 4 0 0 0 7.8 0h3.85A8 8 0 0 1 4.25 14z"/></svg>
+        Perfil
+      </button>
+      <button class="main-tab" role="tab" data-tab="avaliar" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 2 9l10 13L22 9zm0 2.5L19.5 9 12 18.8 4.5 9z"/></svg>
+        Avaliar IV
+      </button>
+      <button class="main-tab" role="tab" data-tab="rota" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        Rota de caça
+      </button>
+      <button class="main-tab" role="tab" data-tab="clas" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5zm0 2.2 7 3.1V11c0 4.4-3 8.7-7 9.9-4-1.2-7-5.5-7-9.9V6.3z"/></svg>
+        Clãs
+      </button>
+    </div>
+    <div class="header-actions">
+      <a class="btn-icon-label btn-twitch" href="https://www.twitch.tv/vpertsz" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+        <span>Live</span>
+      </a>
+      <a class="btn-icon-label btn-store" href="#" id="store-link" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 2 9l10 13L22 9zm0 2.5L19.5 9 12 18.8 4.5 9z"/></svg>
+        Comprar diamonds
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="container">
+
+    <!-- contexto do perfil; cada ferramenta mantém seus próprios controles -->
+    <div class="context" id="profile-context" aria-label="Configuração do perfil">
+      <label class="field">
+        <span class="lbl">Pokémon</span>
+        <select id="species"></select>
+      </label>
+      <label class="field">
+        <span class="lbl">Nível de referência</span>
+        <input class="mono" id="level" type="number" min="1" max="200" value="100">
+      </label>
+      <label class="field">
+        <span class="lbl">Qualidade (0.8 – 1.8)</span>
+        <input class="mono" id="quality" type="number" min="0.8" max="1.8" step="0.001" value="1.0">
+      </label>
+    </div>
+
+    <!-- ============ PERFIL ============ -->
+    <section class="panel card active" id="tab-perfil">
+      <div id="p_head"></div>
+      <hr class="divider">
+      <h2 class="sec">Stats base</h2>
+      <p class="sec-sub">O “corpão” da espécie — com a barra no teto de 255.</p>
+      <div class="stats" id="p_stats"></div>
+      <div class="badges" id="p_badges" style="margin-top:16px"></div>
+      <hr class="divider">
+      <h2 class="sec">Golpes</h2>
+      <p class="sec-sub">O golpe marcado com ★ é o que rende mais dano (poder × stat de ataque).</p>
+      <div class="moves" id="p_moves"></div>
+      <hr class="divider">
+      <h2 class="sec">Efetividade na hunt</h2>
+      <p class="sec-sub">Na hunt a vantagem elemental é 50% mais forte: ×2 vira ×2.5, ×4 vira ×5.5 — e resistências dividem por 1.5.</p>
+      <div id="p_eff"></div>
+      <hr class="divider">
+      <h2 class="sec">Linha evolutiva</h2>
+      <div class="evoline" id="p_evo"></div>
+      <hr class="divider">
+      <h2 class="sec">Drops</h2>
+      <p class="sec-sub">Chance por abate, direto do catálogo do jogo.</p>
+      <div class="drops" id="p_drops"></div>
+    </section>
+
+    <!-- ============ AVALIAR IV ============ -->
+    <section class="panel card" id="tab-avaliar">
+      <span class="kicker">Raio-X do seu Pokémon</span>
+      <h2 class="sec">Esse Pokémon é bom?</h2>
+      <p class="sec-sub">Copie do card do jogo: nível, qualidade, IV Total e os 6 stats. O VPLab estima o growth (IV, 1–32) de cada stat, confere a soma e dá o veredito.</p>
+
+      <div class="scan-card">
+        <div>
+          <strong>Preencher com uma imagem</strong>
+          <span>Envie um print do card. A imagem é processada somente no seu navegador.</span>
+        </div>
+        <label class="scan-button" id="iv-image-button" for="iv-image">Selecionar imagem</label>
+        <input id="iv-image" type="file" accept="image/*" hidden>
+        <div id="iv-scan-status" class="scan-status" aria-live="polite"></div>
+      </div>
+
+      <div class="iv-input-grid" style="margin-bottom:12px">
+        <label class="field"><span class="lbl">Pokémon do card</span><select id="x-species"></select></label>
+        <label class="field"><span class="lbl">Nível do card</span><input class="mono" id="x-level" type="number" min="1" max="999" placeholder="ex.: 302"></label>
+        <label class="field"><span class="lbl">Qualidade do card</span><input class="mono" id="x-qual" type="number" min="0.8" max="1.8" step="0.001" placeholder="ex.: 1.245"></label>
+        <label class="field"><span class="lbl">Power (opcional)</span><input class="mono" id="x-power" type="number" min="1" placeholder="ex.: 6661"></label>
+        <label class="field"><span class="lbl">IV Total (opcional)</span><input class="mono" id="x-ivtotal" type="number" min="0" max="192" placeholder="ex.: 130"></label>
+      </div>
+      <div class="grid6" id="x-obs"></div>
+      <div id="x-result"></div>
+
+      <hr class="divider">
+      <h2 class="sec">Referência de qualidade</h2>
+      <p class="sec-sub">Etiquetas oficiais do jogo — e a chance de nascer em cada faixa.</p>
+      <table class="rank-table">
+        <thead><tr><th>Etiqueta</th><th>Qualidade</th><th>Chance na captura</th></tr></thead>
+        <tbody id="x-qtable"></tbody>
+      </table>
+      <p class="note"><b>Growth e Qualidade são fixos:</b> evoluir não re-rola nenhum dos dois. Na dúvida entre dois da mesma espécie, a Qualidade pesa quase o dobro do IV.</p>
+    </section>
+
+    <!-- ============ ROTA DE CAÇA ============ -->
+    <section class="panel card" id="tab-rota">
+      <span class="kicker">Planeje o farm</span>
+      <h2 class="sec">Rota de caça</h2>
+      <p class="sec-sub">Cada Pokémon vive numa hunt de nível fixo. Escolha o tipo do seu golpe de ataque e veja onde ele rende mais — bosses e lendários ficam de fora, eles não aparecem na hunt.</p>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px">
+        <label class="field" style="width:190px">
+          <span class="lbl">Tipo do meu golpe</span>
+          <select id="rota-type"></select>
+        </label>
+        <div class="field">
+          <span class="lbl">Região</span>
+          <div class="seg" id="rota-region" role="group" aria-label="Região">
+            <button data-r="kanto" aria-pressed="true">Kanto</button>
+            <button data-r="outland" aria-pressed="false">Outland (Nv 150)</button>
+            <button data-r="all" aria-pressed="false">Tudo</button>
+          </div>
+        </div>
+      </div>
+      <div id="rota-best"></div>
+      <div class="legend">
+        <span><b style="color:var(--good)">×5.5</b> devastador</span>
+        <span><b style="color:var(--good)">×2.5</b> ótimo</span>
+        <span>×1 neutro</span>
+        <span><b style="color:var(--mid)">×0.33</b> resiste</span>
+        <span style="opacity:.55">×0 imune</span>
+        <span>⚠️ ele bate super em você</span>
+        <span style="color:var(--faint)">ordem: efetividade → loot médio</span>
+      </div>
+      <div id="rota-list"></div>
+    </section>
+
+    <!-- ============ CLÃS ============ -->
+    <section class="panel card" id="tab-clas">
+      <span class="kicker">Sistema de clãs</span>
+      <h2 class="sec">Clãs: o que dão e como subir</h2>
+      <p class="sec-sub">Regras oficiais da Pokepedia — 10 clãs, cada um cobrindo elementos. O bônus só vale para Pokémon dos elementos do seu clã.</p>
+
+      <div class="clan-cards clan-guide">
+        <div class="clan-card">
+          <h3>Como funciona</h3>
+          <div class="clan-facts">
+            <div><span class="fact-value">Nv 80</span><span>Entrada grátis no Rank 1</span></div>
+            <div><span class="fact-value">💎 40 → 60 → 80</span><span>Custo crescente para trocar</span></div>
+            <div><span class="fact-value">+6% por rank</span><span>Ataque, Atq. Esp., Defesa e Def. Esp.</span></div>
+            <div><span class="fact-value">+30%</span><span>Máximo no Rank 5, apenas nos elementos cobertos</span></div>
+          </div>
+        </div>
+        <div class="clan-card">
+          <h3>Subindo de rank (missões)</h3>
+          <ol class="rank-steps">
+            <li><b>Rank 2 · Nv 90</b><span>Pular: 1,5KK · recompensa: 210k XP</span></li>
+            <li><b>Rank 3 · Nv 100</b><span>Pular: 3KK · recompensa: 420k XP</span></li>
+            <li><b>Rank 4 · Nv 110</b><span>Pular: 4,5KK · recompensa: 630k XP</span></li>
+            <li><b>Rank 5 · Nv 120</b><span>Pular: 6KK · recompensa: 840k XP</span></li>
+          </ol>
+          <p class="clan-mission">Cada etapa pede itens do clã (consumidos), a captura de uma espécie específica e derrotas por elemento.</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <h2 class="sec">Quanto o clã turbina o seu Pokémon</h2>
+      <p class="sec-sub">Calculado no Pokémon, nível e qualidade selecionados lá em cima (IV 32).</p>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
+        <div class="field">
+          <span class="lbl">Seu rank no clã</span>
+          <div class="seg" id="clan-rank" role="group" aria-label="Rank do clã">
+            <button data-r="0">Fora</button><button data-r="1">1</button><button data-r="2">2</button>
+            <button data-r="3">3</button><button data-r="4">4</button><button data-r="5" aria-pressed="true">5</button>
+          </div>
+        </div>
+        <label style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer">
+          <input type="checkbox" id="clan-covers" checked style="width:auto;accent-color:var(--red-2);cursor:pointer">
+          <span id="clan-covers-lbl">Meu clã cobre o tipo deste Pokémon</span>
+        </label>
+      </div>
+      <div id="clan-out"></div>
+      <p class="note">Os nomes dos 10 clãs e seus elementos ficam atrás do login do jogo — confira no painel de clãs lá dentro qual cobre o tipo do seu Pokémon e marque acima.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <span class="foot-brand">
+        <img src="assets/logo-vplab.webp" alt="">
+        VPLab — ferramenta da comunidade VP Store
+      </span>
+      <div class="foot-links">
+        <a href="https://www.twitch.tv/vpertsz" target="_blank" rel="noreferrer">Twitch</a>
+        <a href="https://www.instagram.com/vperts_ot/" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@vperts1" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+      <p class="foot-note">Dados do catálogo oficial (Pokepedia do PokeIdle World), conferidos no mapa do jogo em julho/2026. Projeto independente da comunidade — sem vínculo com os desenvolvedores do jogo.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

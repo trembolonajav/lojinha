@@ -1,9 +1,14 @@
 node_modules/
 .data/
 .env
+.vercel/
+dist/
+apps/vpertz-store/public/uploads/
 .env.local
 .vercel/
 assets/originais/
+**/assets/originais/
+apps/vpertz-store/public/assets/logo-pokefipe.png
 banner de jogo/
 *.zip
 UMAMI.txt
