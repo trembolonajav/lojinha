@@ -12,6 +12,9 @@
     "verify": "npm run check && npm test && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "@vercel/blob": "^2.6.1"
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/por": "1.0.0",
+    "@vercel/blob": "^2.6.1",
+    "tesseract.js": "5.1.1"
   }
 }

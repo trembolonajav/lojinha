@@ -50,7 +50,22 @@ try {
 
   const lab = await fetch(`${base}/vplab/`);
   assert.equal(lab.status, 200);
-  assert.match(await lab.text(), /VPLab/);
+  const labHtml = await lab.text();
+  assert.match(labHtml, /VPLab/);
+  assert.match(labHtml, /vendor\/tesseract\.min\.js/);
+  assert.doesNotMatch(labHtml, /cdn\.jsdelivr\.net\/npm\/tesseract/);
+
+  for (const asset of [
+    "tesseract.min.js",
+    "worker.min.js",
+    "tesseract-core/tesseract-core-simd-lstm.wasm.js",
+    "lang-data/por.traineddata.gz",
+    "lang-data/eng.traineddata.gz"
+  ]) {
+    const response = await fetch(`${base}/vplab/vendor/${asset}`);
+    assert.equal(response.status, 200, `Arquivo local do OCR ausente: ${asset}`);
+    assert.ok(Number(response.headers.get("content-length") || 0) > 0, `Arquivo local do OCR vazio: ${asset}`);
+  }
 
   const pokeFipe = await fetch(`${base}/pokefipe.html`);
   assert.equal(pokeFipe.status, 200);

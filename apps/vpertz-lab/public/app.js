@@ -470,7 +470,13 @@ async function scanIvImage(file){
   pickerButton.classList.add("is-reading");
   status.innerHTML = '<span class="scan-loading">Lendo a imagem… <b>0%</b></span>';
   try {
+    const ocrPaths = {
+      workerPath: "/vplab/vendor/worker.min.js",
+      corePath: "/vplab/vendor/tesseract-core",
+      langPath: "/vplab/vendor/lang-data"
+    };
     const result = await Tesseract.recognize(file, "por+eng", {
+      ...ocrPaths,
       logger: (m) => {
         if (m.status === "recognizing text") status.innerHTML = `<span class="scan-loading">Lendo a imagem… <b>${Math.round(m.progress*100)}%</b></span>`;
       }
@@ -478,6 +484,7 @@ async function scanIvImage(file){
     status.innerHTML = '<span class="scan-loading">Conferindo nível e qualidade…</span>';
     const headerImage = await makeHeaderCrop(file);
     const headerResult = await Tesseract.recognize(headerImage, "por+eng", {
+      ...ocrPaths,
       logger: (m) => {
         if (m.status === "recognizing text") status.innerHTML = `<span class="scan-loading">Conferindo cabeçalho… <b>${Math.round(m.progress*100)}%</b></span>`;
       }

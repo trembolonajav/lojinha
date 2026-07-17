@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 const ROOT = process.cwd();
 const STORE_ROOT = path.join(ROOT, "apps", "vpertz-store", "public");
 const LAB_ROOT = path.join(ROOT, "apps", "vpertz-lab", "public");
+const DIST_LAB_VENDOR = path.join(ROOT, "dist", "vplab", "vendor");
 const PORT = process.env.PORT || 8736;
 
 const MIME = {
@@ -18,12 +19,16 @@ const MIME = {
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
-  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+  "Content-Security-Policy": "default-src 'self'; script-src 'self'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 };
 
 function sendFile(res, file) {
   const ext = path.extname(file).toLowerCase();
-  res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream", ...SECURITY_HEADERS });
+  res.writeHead(200, {
+    "Content-Type": MIME[ext] || "application/octet-stream",
+    "Content-Length": fs.statSync(file).size,
+    ...SECURITY_HEADERS
+  });
   fs.createReadStream(file).pipe(res);
 }
 
@@ -56,6 +61,13 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === "/vplab") {
       res.writeHead(308, { Location: "/vplab/", ...SECURITY_HEADERS }); return res.end();
+    }
+    if (pathname.startsWith("/vplab/vendor/")) {
+      const vendorPath = pathname.slice("/vplab/vendor".length);
+      const vendorFile = safeStatic(DIST_LAB_VENDOR, vendorPath);
+      if (vendorFile && fs.existsSync(vendorFile) && fs.statSync(vendorFile).isFile()) {
+        return sendFile(res, vendorFile);
+      }
     }
     const isLab = pathname.startsWith("/vplab/");
     const staticPath = isLab ? pathname.slice("/vplab".length) : pathname;
