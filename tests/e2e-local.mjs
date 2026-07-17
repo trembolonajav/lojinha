@@ -50,6 +50,10 @@ try {
 
   const lab = await fetch(`${base}/vplab/`);
   assert.equal(lab.status, 200);
+  const csp = lab.headers.get("content-security-policy") || "";
+  assert.match(csp, /script-src 'self' 'wasm-unsafe-eval'/);
+  assert.match(csp, /worker-src 'self' blob:/);
+  assert.equal(csp.split(/\s+/).includes("'unsafe-eval'"), false);
   const labHtml = await lab.text();
   assert.match(labHtml, /VPLab/);
   assert.match(labHtml, /vendor\/tesseract\.min\.js/);
@@ -58,6 +62,9 @@ try {
   for (const asset of [
     "tesseract.min.js",
     "worker.min.js",
+    "tesseract-core/tesseract-core.wasm.js",
+    "tesseract-core/tesseract-core-simd.wasm.js",
+    "tesseract-core/tesseract-core-lstm.wasm.js",
     "tesseract-core/tesseract-core-simd-lstm.wasm.js",
     "lang-data/por.traineddata.gz",
     "lang-data/eng.traineddata.gz"
