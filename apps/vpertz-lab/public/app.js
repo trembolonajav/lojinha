@@ -457,6 +457,13 @@ function findSpeciesInOcr(text){
     normalized.includes(cleanOcr(p.nome).replace(/[^a-z0-9♀♂]+/g, " "))
   );
 }
+function withOcrTimeout(promise, milliseconds = 90000){
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error("OCR_TIMEOUT")), milliseconds);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 async function scanIvImage(file){
   const status = $("#iv-scan-status");
   const picker = $("#iv-image");
@@ -475,20 +482,20 @@ async function scanIvImage(file){
       corePath: "/vplab/vendor/tesseract-core",
       langPath: "/vplab/vendor/lang-data"
     };
-    const result = await Tesseract.recognize(file, "por+eng", {
+    const result = await withOcrTimeout(Tesseract.recognize(file, "por+eng", {
       ...ocrPaths,
       logger: (m) => {
         if (m.status === "recognizing text") status.innerHTML = `<span class="scan-loading">Lendo a imagem… <b>${Math.round(m.progress*100)}%</b></span>`;
       }
-    });
+    }));
     status.innerHTML = '<span class="scan-loading">Conferindo nível e qualidade…</span>';
     const headerImage = await makeHeaderCrop(file);
-    const headerResult = await Tesseract.recognize(headerImage, "por+eng", {
+    const headerResult = await withOcrTimeout(Tesseract.recognize(headerImage, "por+eng", {
       ...ocrPaths,
       logger: (m) => {
         if (m.status === "recognizing text") status.innerHTML = `<span class="scan-loading">Conferindo cabeçalho… <b>${Math.round(m.progress*100)}%</b></span>`;
       }
-    });
+    }));
     const header = headerValues(headerResult.data.text);
     const raw = result.data.text;
     const text = cleanOcr(raw);
