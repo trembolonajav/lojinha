@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-await import("../apps/vpertz-store/public/pokefipe-core.js");
+await import("../apps/vpertz-lab/public/pokefipe-core.js");
 const { calculateFipe, POKEMON } = globalThis.PokeFipe;
 
 test("PokeFipe oferece as 251 espécies da Poképedia", () => {

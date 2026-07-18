@@ -96,17 +96,18 @@ test("mensagem do WhatsApp preserva acentos na URL", () => {
 });
 
 test("arquivos públicos não contêm caractere Unicode de substituição", () => {
-  const publicRoot = path.join(process.cwd(), "apps", "vpertz-store", "public");
   const files = [
-    "index.html", "jogos.html", "negociar.html", "contato.html", "pokefipe.html", "admin.html",
-    "app.js", "pokefipe.js", "pokefipe-core.js", "admin.js", "config.js", "dados.js", "styles.css",
+    "apps/vpertz-store/public/index.html", "apps/vpertz-store/public/jogos.html",
+    "apps/vpertz-store/public/negociar.html", "apps/vpertz-store/public/contato.html",
+    "apps/vpertz-store/public/admin.html", "apps/vpertz-store/public/app.js",
+    "apps/vpertz-store/public/admin.js", "apps/vpertz-store/public/config.js",
+    "apps/vpertz-store/public/dados.js", "apps/vpertz-store/public/styles.css",
+    "apps/vpertz-lab/public/index.html", "apps/vpertz-lab/public/app.js",
+    "apps/vpertz-lab/public/pokefipe-core.js", "apps/vpertz-lab/public/styles.css",
     "api/_lib/defaults.mjs", "api/_lib/validate.mjs"
   ];
   for (const file of files) {
-    const source = file.startsWith("api/")
-      ? path.join(process.cwd(), file)
-      : path.join(publicRoot, file);
-    const content = fs.readFileSync(source, "utf8");
+    const content = fs.readFileSync(path.join(process.cwd(), file), "utf8");
     assert.equal(content.includes("\uFFFD"), false, `${file} contém caractere corrompido`);
   }
 });

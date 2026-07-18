@@ -4,7 +4,8 @@
   "outputDirectory": "dist",
   "redirects": [
     { "source": "/vplab", "destination": "/vplab/", "permanent": true },
-    { "source": "/pokefipe", "destination": "/pokefipe.html", "permanent": false }
+    { "source": "/pokefipe", "destination": "/vplab/?tab=fipe", "permanent": true },
+    { "source": "/pokefipe.html", "destination": "/vplab/?tab=fipe", "permanent": true }
   ],
   "headers": [
     {

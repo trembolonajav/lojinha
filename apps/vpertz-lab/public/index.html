@@ -30,6 +30,10 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 7.75 6H15.9a4 4 0 0 0-7.8 0H4.25A8 8 0 0 1 12 4zm0 10.5A2.5 2.5 0 1 1 12 9.5a2.5 2.5 0 0 1 0 5zM4.25 14h3.85a4 4 0 0 0 7.8 0h3.85A8 8 0 0 1 4.25 14z"/></svg>
         Perfil
       </button>
+      <button class="main-tab" role="tab" data-tab="pokedex" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h13a3 3 0 0 1 3 3v15H7a3 3 0 0 1-3-3zm3 2a1 1 0 0 0-1 1v9.2c.3-.1.7-.2 1-.2h11V6a1 1 0 0 0-1-1zm0 12a1 1 0 1 0 0 2h11v-2z"/></svg>
+        Pokédex
+      </button>
       <button class="main-tab" role="tab" data-tab="avaliar" aria-selected="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 2 9l10 13L22 9zm0 2.5L19.5 9 12 18.8 4.5 9z"/></svg>
         Avaliar IV
@@ -37,6 +41,10 @@
       <button class="main-tab" role="tab" data-tab="rota" aria-selected="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
         Rota de caça
+      </button>
+      <button class="main-tab" role="tab" data-tab="fipe" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-8.99-8.99A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .53.21 1.04.59 1.41l8.99 8.99a2 2 0 0 0 2.83 0l7-7a2 2 0 0 0 0-2.82zM13 20 4 11V4h7l9 9zM7 8.5A1.5 1.5 0 1 1 8.5 7 1.5 1.5 0 0 1 7 8.5z"/></svg>
+        PokeFipe
       </button>
       <button class="main-tab" role="tab" data-tab="clas" aria-selected="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5zm0 2.2 7 3.1V11c0 4.4-3 8.7-7 9.9-4-1.2-7-5.5-7-9.9V6.3z"/></svg>
@@ -60,23 +68,19 @@
   <div class="container">
 
     <!-- contexto do perfil; cada ferramenta mantém seus próprios controles -->
-    <div class="context" id="profile-context" aria-label="Configuração do perfil">
-      <label class="field">
-        <span class="lbl">Pokémon</span>
-        <select id="species"></select>
-      </label>
-      <label class="field">
-        <span class="lbl">Nível de referência</span>
-        <input class="mono" id="level" type="number" min="1" max="200" value="100">
-      </label>
-      <label class="field">
-        <span class="lbl">Qualidade (0.8 – 1.8)</span>
-        <input class="mono" id="quality" type="number" min="0.8" max="1.8" step="0.001" value="1.0">
-      </label>
-    </div>
-
     <!-- ============ PERFIL ============ -->
     <section class="panel card active" id="tab-perfil">
+      <div class="tool-controls" aria-label="Pesquisar e configurar Pokémon">
+        <div class="control-title"><strong>Buscar Pokémon</strong><span>Digite o nome ou o número da Pokédex</span></div>
+        <label class="field search-field">
+          <span class="lbl">Nome ou número</span>
+          <div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="species-search" autocomplete="off" placeholder="Buscar Pokémon por nome ou número..." role="combobox" aria-expanded="false" aria-controls="species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div>
+          <div class="species-results" id="species-results" role="listbox" hidden></div>
+        </label>
+        <label class="field"><span class="lbl">Nível de referência</span><input class="mono" id="level" type="number" min="1" max="999" value="100"></label>
+        <label class="field"><span class="lbl">Qualidade (0.8 – 1.8)</span><input class="mono" id="quality" type="number" min="0.8" max="1.8" step="0.001" value="1.0"></label>
+        <div class="search-feedback" id="species-feedback" aria-live="polite"></div>
+      </div>
       <div id="p_head"></div>
       <hr class="divider">
       <h2 class="sec">Stats base</h2>
@@ -100,31 +104,110 @@
       <div class="drops" id="p_drops"></div>
     </section>
 
+    <!-- ============ POKÉDEX ============ -->
+    <section class="panel card" id="tab-pokedex">
+      <span class="kicker">Catálogo do VPLab</span>
+      <h2 class="sec">Pokédex</h2>
+      <p class="sec-sub">Todas as 251 espécies da nossa base, com stats, golpes, evolução, hunt, preços e drops.</p>
+      <div class="pokedex-controls">
+        <label class="field search-field pokedex-search-field"><span class="lbl">Buscar espécie</span><div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="pokedex-species-search" autocomplete="off" placeholder="Buscar Pokémon por nome ou número..." role="combobox" aria-expanded="false" aria-controls="pokedex-species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div><div class="species-results" id="pokedex-species-results" role="listbox" hidden></div><span class="search-feedback" id="pokedex-species-feedback" aria-live="polite"></span></label>
+        <label class="field"><span class="lbl">Tipo</span><select id="pokedex-type"><option value="">Todos os tipos</option></select></label>
+        <label class="field"><span class="lbl">Raridade</span><select id="pokedex-rarity"><option value="">Todas as raridades</option></select></label>
+      </div>
+      <div id="pokedex-content"></div>
+    </section>
+
     <!-- ============ AVALIAR IV ============ -->
     <section class="panel card" id="tab-avaliar">
       <span class="kicker">Raio-X do seu Pokémon</span>
       <h2 class="sec">Esse Pokémon é bom?</h2>
       <p class="sec-sub">Copie do card do jogo: nível, qualidade, IV Total e os 6 stats. O VPLab estima o growth (IV, 1–32) de cada stat, confere a soma e dá o veredito.</p>
 
-      <div class="scan-card">
-        <div>
-          <strong>Preencher com uma imagem</strong>
-          <span>Envie um print do card. A imagem é processada somente no seu navegador.</span>
-        </div>
-        <label class="scan-button" id="iv-image-button" for="iv-image">Selecionar imagem</label>
-        <input id="iv-image" type="file" accept="image/*" hidden>
-        <div id="iv-scan-status" class="scan-status" aria-live="polite"></div>
+      <div class="iv-actions" aria-label="Ações do avaliador">
+        <button class="action-button" id="iv-help-button" type="button" aria-haspopup="dialog" aria-controls="iv-help-modal">Como usar</button>
+        <button class="action-button" id="iv-example-button" type="button">Preencher exemplo</button>
+        <button class="action-button subtle" id="iv-reset-button" type="button">Limpar dados</button>
+      </div>
+      <div class="modal-overlay" id="iv-help-modal" hidden>
+        <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="iv-help-title">
+          <button class="modal-close" id="iv-help-close" type="button" aria-label="Fechar instruções">×</button>
+          <span class="kicker">Guia rápido</span>
+          <h2 id="iv-help-title">Como avaliar seu Pokémon</h2>
+          <p class="modal-lead">Você pode preencher os dados manualmente ou deixar o VPLab ler um print do card.</p>
+          <div class="help-grid">
+            <div class="help-copy">
+              <h3>Preencher por imagem</h3>
+              <ol class="help-steps">
+                <li><b>Abra o card completo</b> do Pokémon no jogo. Se necessário, aumente o zoom para deixar os números nítidos.</li>
+                <li><b>Tire um print sem cortes</b>, mostrando nome, nível, qualidade, Power, IV Total e os seis stats.</li>
+                <li>Clique em <b>Selecionar imagem</b> e escolha o arquivo. PNG, JPG e WebP são os formatos recomendados.</li>
+                <li>O leitor preenche os campos automaticamente. <b>Confira os valores</b> antes de considerar o resultado.</li>
+              </ol>
+              <div class="privacy-note"><b>Privacidade:</b> a imagem é lida no seu navegador e não é enviada nem armazenada pelo VPLab.</div>
+              <h3>Para uma leitura melhor</h3>
+              <ul class="help-tips">
+                <li>Use imagem nítida, sem compressão forte ou partes cobertas.</li>
+                <li>Evite prints muito pequenos, borrados ou com o card cortado.</li>
+                <li>Se algum número sair errado, corrija o campo manualmente.</li>
+              </ul>
+            </div>
+            <figure class="help-example">
+              <img src="assets/iv-example-scizor.png" alt="Exemplo de card completo do Scizor aceito pelo leitor do VPLab">
+              <figcaption><b>Exemplo válido:</b> card completo, texto nítido e todos os seis stats visíveis.</figcaption>
+            </figure>
+          </div>
+          <div class="modal-actions"><button class="scan-button" id="iv-help-use-image" type="button">Entendi, selecionar imagem</button></div>
+        </section>
       </div>
 
-      <div class="iv-input-grid" style="margin-bottom:12px">
-        <label class="field"><span class="lbl">Pokémon do card</span><select id="x-species"></select></label>
-        <label class="field"><span class="lbl">Nível do card</span><input class="mono" id="x-level" type="number" min="1" max="999" placeholder="ex.: 302"></label>
-        <label class="field"><span class="lbl">Qualidade do card</span><input class="mono" id="x-qual" type="number" min="0.8" max="1.8" step="0.001" placeholder="ex.: 1.245"></label>
-        <label class="field"><span class="lbl">Power (opcional)</span><input class="mono" id="x-power" type="number" min="1" placeholder="ex.: 6661"></label>
-        <label class="field"><span class="lbl">IV Total (opcional)</span><input class="mono" id="x-ivtotal" type="number" min="0" max="192" placeholder="ex.: 130"></label>
+      <div class="modal-overlay" id="fipe-quote-modal" hidden>
+        <section class="help-modal fipe-quote-modal" role="dialog" aria-modal="true" aria-labelledby="fipe-quote-title">
+          <button class="modal-close" id="fipe-quote-close" type="button" aria-label="Fechar estimativa">×</button>
+          <div class="fipe-quote-kicker">
+            <span class="fipe-quote-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7V6a5 5 0 0 1 10 0v1h2.2a1 1 0 0 1 1 .93l.95 12A1.5 1.5 0 0 1 19.66 22H4.34a1.5 1.5 0 0 1-1.5-2.07l.96-12a1 1 0 0 1 1-.93zm2 0h6V6a3 3 0 0 0-6 0zm-2 4a1 1 0 1 0 2 0V9H7zm8 0a1 1 0 1 0 2 0V9h-2z"/></svg></span>
+            <span class="kicker">Estimativa PokeFipe</span>
+          </div>
+          <h2 id="fipe-quote-title" class="fipe-quote-title">Quanto pedir por esse Pokémon?</h2>
+          <div id="fipe-quote-content"></div>
+        </section>
       </div>
-      <div class="grid6" id="x-obs"></div>
-      <div id="x-result"></div>
+
+      <div class="iv-workspace">
+        <div class="iv-entry-panel">
+          <div class="workspace-label">Entrada de dados</div>
+          <div class="scan-card">
+            <div>
+              <strong>Preencher com uma imagem</strong>
+              <span>Envie um print do card. A imagem é processada somente no seu navegador.</span>
+            </div>
+            <label class="scan-button" id="iv-image-button" for="iv-image">Selecionar imagem</label>
+            <input id="iv-image" type="file" accept="image/*" hidden>
+            <div id="iv-scan-status" class="scan-status" aria-live="polite"></div>
+          </div>
+
+          <div class="iv-input-grid" style="margin-bottom:12px">
+            <div class="iv-species-picker">
+              <div class="pokemon-sprite-box" aria-hidden="true"><img id="x-species-sprite" class="is-placeholder" src="assets/pokemon-placeholder.webp" alt=""></div>
+              <label class="field search-field">
+                <span class="lbl">Pokémon do card</span>
+              <div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="iv-species-search" autocomplete="off" placeholder="Buscar Pokémon por nome ou número..." role="combobox" aria-expanded="false" aria-controls="iv-species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div>
+                <div class="species-results" id="iv-species-results" role="listbox" hidden></div>
+                <span class="search-feedback" id="iv-species-feedback" aria-live="polite"></span>
+              </label>
+              <select id="x-species" hidden aria-hidden="true" tabindex="-1"></select>
+            </div>
+            <label class="field"><span class="lbl">Nível do card</span><input class="mono" id="x-level" type="number" min="1" max="999" placeholder="ex.: 302"></label>
+            <label class="field"><span class="lbl">Qualidade do card</span><input class="mono" id="x-qual" type="number" min="0.8" max="1.8" step="0.001" placeholder="ex.: 1.245"></label>
+            <label class="field"><span class="lbl">Power (opcional)</span><input class="mono" id="x-power" type="number" min="1" placeholder="ex.: 6661"></label>
+            <label class="field"><span class="lbl">IV Total (opcional)</span><input class="mono" id="x-ivtotal" type="number" min="0" max="192" placeholder="ex.: 130"></label>
+          </div>
+          <div class="grid6" id="x-obs"></div>
+        </div>
+        <div class="iv-result-panel">
+          <div class="workspace-label">Resultado da avaliação</div>
+          <div id="x-result"></div>
+        </div>
+      </div>
 
       <hr class="divider">
       <h2 class="sec">Referência de qualidade</h2>
@@ -140,13 +223,16 @@
     <section class="panel card" id="tab-rota">
       <span class="kicker">Planeje o farm</span>
       <h2 class="sec">Rota de caça</h2>
-      <p class="sec-sub">Cada Pokémon vive numa hunt de nível fixo. Escolha o tipo do seu golpe de ataque e veja onde ele rende mais — bosses e lendários ficam de fora, eles não aparecem na hunt.</p>
+      <p class="sec-sub">Escolha seu Pokémon e o nível atual. O VPLab libera os golpes aprendidos até esse nível e calcula automaticamente qual funciona melhor contra cada hunt.</p>
 
-      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px">
-        <label class="field" style="width:190px">
-          <span class="lbl">Tipo do meu golpe</span>
-          <select id="rota-type"></select>
+      <div class="route-controls">
+        <label class="field search-field route-pokemon-field">
+          <span class="lbl">Meu Pokémon</span>
+          <div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="route-species-search" autocomplete="off" placeholder="Buscar Pokémon..." role="combobox" aria-expanded="false" aria-controls="route-species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div>
+          <div class="species-results" id="route-species-results" role="listbox" hidden></div>
+          <span class="search-feedback" id="route-species-feedback" aria-live="polite"></span>
         </label>
+        <label class="field route-level-field"><span class="lbl">Nível atual</span><input class="mono" id="rota-level" type="number" min="1" max="999" value="1"></label>
         <div class="field">
           <span class="lbl">Região</span>
           <div class="seg" id="rota-region" role="group" aria-label="Região">
@@ -155,7 +241,9 @@
             <button data-r="all" aria-pressed="false">Tudo</button>
           </div>
         </div>
+        <button class="action-button subtle" id="route-reset-button" type="button">Redefinir filtros</button>
       </div>
+      <div id="route-moves"></div>
       <div id="rota-best"></div>
       <div class="legend">
         <span><b style="color:var(--good)">×5.5</b> devastador</span>
@@ -167,6 +255,75 @@
         <span style="color:var(--faint)">ordem: efetividade → loot médio</span>
       </div>
       <div id="rota-list"></div>
+    </section>
+
+    <!-- ============ POKEFIPE ============ -->
+    <section class="panel card" id="tab-fipe">
+      <div class="fipe-hero">
+        <div class="fipe-mark"><img src="assets/logo-pokefipe-transparente.png" alt="PokeFipe — Preço de referência"></div>
+        <div>
+          <span class="kicker">Referência da comunidade</span>
+          <h2 class="sec fipe-hero-title">Descubra uma faixa justa para seu Pokémon</h2>
+          <p class="sec-sub">Informe IV, multiplicador e nível. A PokeFipe transforma a tabela da comunidade em uma consulta rápida, sem precisar abrir o Excel.</p>
+        </div>
+      </div>
+      <div class="fipe-layout" aria-label="Calculadora PokeFipe">
+        <form class="fipe-card" id="lab-fipe-form">
+          <div class="fipe-card-title">
+            <span class="fipe-step">01</span>
+            <div><strong>Dados do Pokémon</strong><small>Preencha os mesmos campos usados na tabela.</small></div>
+          </div>
+          <div class="fipe-fields">
+            <label class="field fipe-wide">
+              <span class="lbl">Pokémon meta</span>
+              <select id="lab-fipe-pokemon" name="pokemon"><option value="">Selecione um Pokémon (opcional)</option></select>
+              <small class="field-hint">251 espécies disponíveis na Poképedia do PokeIdle World.</small>
+            </label>
+            <label class="field"><span class="lbl">IV</span><input class="mono" name="iv" type="number" min="1" step="0.01" value="110" inputmode="decimal" required><small class="field-hint">Exemplo da tabela: 110</small></label>
+            <label class="field"><span class="lbl">Multiplicador</span><input class="mono" name="multiplier" type="number" min="0.01" step="0.01" value="1.80" inputmode="decimal" required><small class="field-hint">Exemplo da tabela: 1,80</small></label>
+            <label class="field fipe-wide"><span class="lbl">Nível do Pokémon</span><input class="mono" name="level" type="number" min="1" step="1" value="1" inputmode="numeric" required><small class="field-hint">Cada nível adiciona <b id="level-rate"></b> à referência.</small></label>
+          </div>
+          <div class="fipe-actions">
+            <button class="fipe-calculate" type="submit">Calcular referência</button>
+            <button class="fipe-clear" type="reset">Limpar</button>
+          </div>
+        </form>
+        <div class="fipe-card fipe-output" aria-live="polite">
+          <div class="fipe-card-title">
+            <span class="fipe-step">02</span>
+            <div><strong>Estimativa PokeFipe</strong><small>Faixa informativa baseada na planilha.</small></div>
+          </div>
+          <div class="fipe-empty" id="fipe-empty">
+            <img class="fipe-empty-logo" src="assets/logo-pokefipe-transparente.png" alt="" aria-hidden="true">
+            <strong>Sua referência aparecerá aqui</strong>
+            <span>Preencha os dados e clique em calcular.</span>
+          </div>
+          <div class="fipe-result" id="fipe-result" hidden>
+            <div class="fipe-result-head">
+              <span id="result-name">Pokémon</span>
+              <small>Pontuação <b id="result-score">—</b></small>
+            </div>
+            <div class="fipe-total">
+              <span>Soma estimada — Pokémon + nível</span>
+              <strong id="result-total">—</strong>
+              <small>Resumo adicional; a planilha apresenta os dois valores separadamente.</small>
+            </div>
+            <div class="fipe-breakdown">
+              <div><span>Faixa em diamantes</span><strong id="result-diamonds">—</strong></div>
+              <div><span>Valor do Pokémon</span><strong id="result-pokemon">—</strong></div>
+              <div><span>Custo pelo nível</span><strong id="result-level">—</strong></div>
+            </div>
+          </div>
+          <div class="fipe-warning" id="fipe-warning" hidden>
+            <strong>Dados incompletos</strong><span></span><small></small>
+          </div>
+        </div>
+      </div>
+      <div class="fipe-info">
+        <div><span>Base do cálculo</span><strong>IV × multiplicador</strong><small>Gera a pontuação usada para localizar a faixa.</small></div>
+        <div><span>Cotação da tabela</span><strong><b id="diamond-rate"></b> / diamante</strong><small>Valor fixado na planilha fornecida.</small></div>
+        <div><span>Importante</span><strong>Referência, não oferta</strong><small>Condição, procura e negociação podem alterar o preço final.</small></div>
+      </div>
     </section>
 
     <!-- ============ CLÃS ============ -->
@@ -197,9 +354,18 @@
         </div>
       </div>
 
+      <!-- Simulador de bônus: escondido temporariamente; será reformulado -->
+      <div id="clan-simulator" hidden>
       <hr class="divider">
       <h2 class="sec">Quanto o clã turbina o seu Pokémon</h2>
-      <p class="sec-sub">Calculado no Pokémon, nível e qualidade selecionados lá em cima (IV 32).</p>
+      <p class="sec-sub">Escolha abaixo o Pokémon que você quer simular. O cálculo considera IV 32.</p>
+      <div class="tool-controls clan-controls" aria-label="Configurar simulação de bônus do clã">
+        <div class="control-title"><strong>Simular bônus do clã</strong><span>Estes dados alteram somente o cálculo abaixo</span></div>
+        <label class="field search-field"><span class="lbl">Pokémon</span><div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="clan-species-search" autocomplete="off" placeholder="Buscar Pokémon por nome ou número..." role="combobox" aria-expanded="false" aria-controls="clan-species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div><div class="species-results" id="clan-species-results" role="listbox" hidden></div></label>
+        <label class="field"><span class="lbl">Nível</span><input class="mono" id="clan-level" type="number" min="1" max="999" value="100"></label>
+        <label class="field"><span class="lbl">Qualidade</span><input class="mono" id="clan-quality" type="number" min="0.8" max="1.8" step="0.001" value="1.0"></label>
+        <div class="search-feedback" id="clan-species-feedback" aria-live="polite"></div>
+      </div>
       <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
         <div class="field">
           <span class="lbl">Seu rank no clã</span>
@@ -215,6 +381,7 @@
       </div>
       <div id="clan-out"></div>
       <p class="note">Os nomes dos 10 clãs e seus elementos ficam atrás do login do jogo — confira no painel de clãs lá dentro qual cobre o tipo do seu Pokémon e marque acima.</p>
+      </div>
     </section>
 
   </div>
@@ -239,6 +406,7 @@
 
 <script src="data.js"></script>
 <script src="vendor/tesseract.min.js"></script>
+<script src="pokefipe-core.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

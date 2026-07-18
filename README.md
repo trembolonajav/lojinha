@@ -1,7 +1,7 @@
 # Plataforma Vpertz
 
 Monorepositório oficial da Vpertz. Um único projeto Vercel publica a Store,
-o painel administrativo, a PokeFipe e o VPLab no mesmo domínio.
+o painel administrativo e o VPLab (que inclui a PokeFipe) no mesmo domínio.
 
 ## Endereços
 
@@ -9,7 +9,7 @@ o painel administrativo, a PokeFipe e o VPLab no mesmo domínio.
 |---|---|---|
 | Vpertz Store | `/` | `apps/vpertz-store/public/` |
 | Painel | `/admin.html` | `apps/vpertz-store/public/admin.*` + `api/` |
-| PokeFipe | `/pokefipe.html` | `apps/vpertz-store/public/pokefipe*` |
+| PokeFipe | `/vplab/?tab=fipe` | `apps/vpertz-lab/public/pokefipe-core.js` + aba no VPLab |
 | VPLab | `/vplab/` | `apps/vpertz-lab/public/` |
 
 ## Estrutura
@@ -17,9 +17,10 @@ o painel administrativo, a PokeFipe e o VPLab no mesmo domínio.
 ```text
 Vpertz/
 ├── apps/
-│   ├── vpertz-store/public/   # Site, painel e PokeFipe
+│   ├── vpertz-store/public/   # Site e painel
 │   └── vpertz-lab/
-│       ├── public/            # Aplicação publicada em /vplab/
+│       ├── public/            # Aplicação publicada em /vplab/ (inclui PokeFipe)
+│       ├── design/            # Mockups e referências (não publicados)
 │       └── source-data/       # Fontes usadas para gerar o catálogo
 ├── api/                       # Functions serverless da Vercel
 ├── scripts/build.mjs          # Monta dist/
@@ -42,7 +43,7 @@ npm run dev
 ```
 
 - Store: `http://127.0.0.1:8736/`
-- PokeFipe: `http://127.0.0.1:8736/pokefipe.html`
+- PokeFipe: `http://127.0.0.1:8736/vplab/?tab=fipe`
 - VPLab: `http://127.0.0.1:8736/vplab/`
 - Admin: `http://127.0.0.1:8736/admin.html`
 

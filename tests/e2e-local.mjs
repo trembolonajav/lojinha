@@ -74,9 +74,11 @@ try {
     assert.ok(Number(response.headers.get("content-length") || 0) > 0, `Arquivo local do OCR vazio: ${asset}`);
   }
 
-  const pokeFipe = await fetch(`${base}/pokefipe.html`);
-  assert.equal(pokeFipe.status, 200);
-  assert.match(await pokeFipe.text(), /PokeFipe/);
+  assert.match(labHtml, /PokeFipe/);
+  const pokeFipeCore = await fetch(`${base}/vplab/pokefipe-core.js`);
+  assert.equal(pokeFipeCore.status, 200, "pokefipe-core.js deve ser servido pelo VPLab");
+  const legacyPokeFipe = await fetch(`${base}/pokefipe.html`);
+  assert.equal(legacyPokeFipe.status, 404, "pokefipe.html não deve mais existir na Store (agora é /vplab/?tab=fipe)");
 
   const login = await json(`${base}/api/login`, {
     method: "POST",

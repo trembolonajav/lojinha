@@ -15,8 +15,8 @@ api/ ─────────────────────────
 
 ## Responsabilidades
 
-- **Store:** páginas comerciais, contato, negociação, PokeFipe e painel.
-- **VPLab:** ferramentas de perfil, IV, rotas de caça e clãs.
+- **Store:** páginas comerciais, contato, negociação e painel.
+- **VPLab:** ferramentas de perfil, IV, PokeFipe, rotas de caça e clãs.
 - **API:** autenticação, configuração pública, administração e uploads.
 - **Blob:** persistência de configurações e imagens do painel.
 - **Build:** apenas copia fontes públicas para a saída; não transforma dados.

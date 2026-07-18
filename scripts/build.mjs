@@ -50,6 +50,5 @@ for (const language of ["por", "eng"]) {
 
 console.log("Build concluído:");
 console.log("  Store    -> dist/");
-console.log("  PokeFipe -> dist/pokefipe.html");
-console.log("  VPLab    -> dist/vplab/");
+console.log("  VPLab    -> dist/vplab/ (inclui a aba PokeFipe)");
 console.log("  OCR local -> dist/vplab/vendor/");
