@@ -54,10 +54,10 @@ const QUALITY_TIERS = [
   { min:1.7,  max:1.81,  nome:"Lendária", cor:"#e5b34f" }
 ];
 const QUALITY_BANDS = [
-  ["0.8 – 0.9", "5%"], ["0.9 – 1.0", "5%"], ["1.0 – 1.1", "34,04%"],
-  ["1.1 – 1.2", "20%"], ["1.2 – 1.3", "10%"], ["1.3 – 1.4", "10%"],
-  ["1.4 – 1.5", "10%"], ["1.5 – 1.6", "5%"], ["1.7 – 1.799", "0,67%"],
-  ["1.800 (perfeita)", "0,29%"]
+  ["0,80 – 0,90", "5%"], ["0,90 – 1,00", "5%"], ["1,00 – 1,10", "34,03846%"],
+  ["1,10 – 1,20", "20%"], ["1,20 – 1,30", "10%"], ["1,30 – 1,40", "10%"],
+  ["1,40 – 1,50", "10%"], ["1,50 – 1,60", "5%"], ["1,60 – 1,70", "0%"],
+  ["1,70 – 1,799", "0,67308%"], ["1,800 exato (perfeita)", "0,28846%"]
 ];
 const RARITY_COLOR = {
   "Comum":"#9a8d84", "Incomum":"#4fc47a", "Raro":"#5b9bd8",
@@ -72,6 +72,7 @@ const num = (v) => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 const clamp = (x,a,b) => Math.max(a, Math.min(b, x));
 const pad3 = (n) => String(n).padStart(3, "0");
 const fmt = (n) => (n ?? 0).toLocaleString("pt-BR");
+const fmtQuality = (n) => Number(n).toLocaleString("pt-BR", { minimumFractionDigits:2, maximumFractionDigits:3 });
 const spriteUrl = (dexNo) => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${dexNo}.png`;
 const SPRITE_PLACEHOLDER = "assets/pokemon-placeholder.webp";
 
@@ -199,13 +200,10 @@ function syncUrl(){
   });
   $("#x-obs").innerHTML = STAT_NAMES.map((n, i) =>
     `<label class="field"><span class="lbl" style="text-align:center">${n}</span><input class="mono" id="o${i}" type="number" min="1" placeholder="—" style="text-align:center"></label>`).join("");
-  $("#x-qtable").innerHTML = QUALITY_TIERS.map((t) => {
-    const bands = t.nome === "Fraca" ? "10%" :
-      t.nome === "Comum" ? "34%" : t.nome === "Incomum" ? "30%" :
-      t.nome === "Rara" ? "20%" : t.nome === "Épica" ? "5%" : "< 1%";
-    const faixa = t.nome === "Lendária" ? "1.7+ (1.800 = perfeita)" :
-      `${t.min.toFixed(1)} – ${t.max.toFixed(1)}`;
-    return `<tr><td><span class="qtag" style="color:${t.cor};border-color:${t.cor}66;background:${t.cor}14">${t.nome}</span></td><td class="mono">${faixa}</td><td>${bands}</td></tr>`;
+  $("#x-qtable").innerHTML = QUALITY_BANDS.map(([range, chance]) => {
+    const first = Number(range.match(/[0-9]+(?:[.,][0-9]+)?/)?.[0].replace(",", ".") || 1.8);
+    const tier = qualityTier(first === 1.8 ? 1.8 : first + .00001);
+    return `<tr><td><span class="qtag" style="color:${tier.cor};border-color:${tier.cor}66;background:${tier.cor}14">${tier.nome}</span></td><td class="mono">${range}</td><td class="mono">${chance}</td></tr>`;
   }).join("");
 })();
 
@@ -361,7 +359,7 @@ function renderAvaliar(){
 
   box.innerHTML = rowsHtml + powerCheck + check + `
     <div class="verdict">
-      <span class="qtag" style="color:${tier.cor};border-color:${tier.cor}66;background:${tier.cor}14">Qualidade ${tier.nome} (${q})</span>
+      <span class="qtag" style="color:${tier.cor};border-color:${tier.cor}66;background:${tier.cor}14">Qualidade ${tier.nome} (${fmtQuality(q)})</span>
       <div class="big" style="color:${ivNota[1]}">IV ${ivNota[0]} — potencial ${potential.toFixed(1).replace(".", ",")}%</div>
       <div class="analysis-metrics">
         <span><b>${inferred.total.min}–${inferred.total.max}</b> intervalo de IV</span>
@@ -383,17 +381,28 @@ const cleanOcr = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLow
 function ocrNumber(text, labels, decimal=false){
   for (const label of labels) {
     /* Não atravessa linhas: evita que um rótulo capture o número do campo seguinte. */
-    const re = new RegExp(`(?:^|\\n)\\s*${label}[^\\n0-9]{0,120}([0-9]+(?:[.,][0-9]+)?)`, "im");
+    const re = new RegExp(`(?:^|\\n|\\s)${label}[^\\n0-9]{0,80}([0-9]+(?:[.,][0-9]+)?)`, "im");
     const hit = text.match(re);
     if (hit) return decimal ? hit[1].replace(",", ".") : hit[1].replace(/[^0-9]/g, "");
   }
   return "";
 }
 function qualityFromCard(text){
-  /* O card real mostra a raridade seguida de ×1.78, sem a palavra “Qualidade”. */
-  const rarityLine = text.match(/(?:fraca|comum|incomum|rara|lendaria|epica)[^\n]{0,40}[x×]\s*([01](?:[.,]\d{1,3})?)/i);
-  const anyMultiplier = text.match(/[x×]\s*([01][.,]\d{1,3})\b/i);
-  return (rarityLine || anyMultiplier)?.[1]?.replace(",", ".") || "";
+  /* OCR costuma trocar × por -, ~ ou colar 1.78 como 178. */
+  const tierHit = text.match(/(fraca|comum|incomum|rara|lendaria|epica)[^0-9\n]{0,45}([01](?:[.,/]\d{1,3}|\d{2}))/i);
+  const anyMultiplier = text.match(/[x×~\-]+\s*([01](?:[.,/]\d{1,3}|\d{2}))/i);
+  const hit = tierHit || anyMultiplier;
+  if (!hit) return "";
+  const tier = tierHit?.[1]?.toLowerCase() || "";
+  let token = (tierHit ? tierHit[2] : anyMultiplier[1]).replace(",", ".").replace("/", ".");
+  if (/^1\d{2}$/.test(token)) token = `1.${token.slice(1)}`;
+  let value = Number(token);
+  /* Em cards lendários, 1/0 e 1/2 são leituras comuns de 1.70 e 1.72. */
+  if (tier === "lendaria" && value >= 1 && value < 1.7) {
+    const last = token.match(/(\d)\s*$/)?.[1] || "0";
+    value = Number(`1.7${last}`);
+  }
+  return value >= .8 && value <= 1.8 ? String(value) : "";
 }
 async function makeHeaderCrop(file){
   const bitmap = await createImageBitmap(file);
@@ -417,6 +426,32 @@ async function makeHeaderCrop(file){
   ctx.putImageData(pixels, 0, 0);
   return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }
+async function makeCompactCardImage(file){
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.max(3, Math.ceil(1800 / bitmap.width));
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width * scale;
+  canvas.height = bitmap.height * scale;
+  const ctx = canvas.getContext("2d", { willReadFrequently:true });
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  for (let i=0; i<pixels.data.length; i+=4) {
+    const gray = pixels.data[i]*.299 + pixels.data[i+1]*.587 + pixels.data[i+2]*.114;
+    const value = gray < 35 ? 0 : gray > 165 ? 255 : Math.round((gray-35)*1.96);
+    pixels.data[i] = pixels.data[i+1] = pixels.data[i+2] = value;
+  }
+  ctx.putImageData(pixels, 0, 0);
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+}
+async function imageWidth(file){
+  const bitmap = await createImageBitmap(file);
+  const width = bitmap.width;
+  bitmap.close();
+  return width;
+}
 function headerValues(rawHeader){
   const text = cleanOcr(rawHeader).replace(/[|]/g, "1");
   const explicitLevel = text.match(/n[i1l]vel\s*[:.]?\s*(\d{1,3})/i) || text.match(/(?:lvl|lv|nv)\s*[:.]?\s*(\d{1,3})/i);
@@ -428,6 +463,29 @@ function headerValues(rawHeader){
   const explicit = explicitLevel && +explicitLevel[1] >= 1 ? explicitLevel[1] : "";
   return { level:explicit || levelFallback || "", quality, power };
 }
+function compactCardValues(raw){
+  const text = cleanOcr(raw).replace(/[|]/g, "1");
+  const valueAfter = (patterns, decimal=false) => {
+    for (const pattern of patterns) {
+      const hit = text.match(new RegExp(`(?:^|\\s)${pattern}\\s*[:.]?\\s*([0-9]+(?:[.,][0-9]+)?)`, "im"));
+      if (hit) return decimal ? hit[1].replace(",", ".") : hit[1].replace(/\D/g, "");
+    }
+    return "";
+  };
+  const iv = text.match(/(?:^|\s)[i1|l]v\s*[:.]?\s*(\d{2,3})(?:\s*\/\s*\d{2,3}|\s*1?9?2)?/im);
+  return {
+    level:valueAfter(["nv", "lv", "nivel"]),
+    quality:qualityFromCard(text) || valueAfter(["qualidade", "quality"], true),
+    total:iv?.[1] || "",
+    power:valueAfter(["poder", "power"]),
+    stats:[
+      valueAfter(["hp", "vida"]), valueAfter(["atk", "ataque"]), valueAfter(["def", "defesa"]),
+      valueAfter(["spa", "sp\\.?a", "atq\\.?\\s*esp"]),
+      valueAfter(["spd", "sp\\.?d", "def\\.?\\s*esp"]),
+      valueAfter(["vel", "speed", "velocidade"])
+    ]
+  };
+}
 function reconcileCardFields(p, stats, read){
   if (stats.some((v) => !Number.isFinite(+v) || +v <= 0)) return read;
   const sumStats = stats.reduce((sum,v) => sum+(+v),0);
@@ -438,7 +496,7 @@ function reconcileCardFields(p, stats, read){
   /* Power e soma dos stats revelam a qualidade mesmo quando ×1.78 falha no OCR. */
   if (power > 0) {
     const derivedQ = power/sumStats;
-    if (derivedQ >= .8 && derivedQ <= 1.8 && (!quality || Math.abs(derivedQ-quality) <= .04)) {
+    if (derivedQ >= .8 && derivedQ <= 1.8 && !quality) {
       quality = Math.round(derivedQ*1000)/1000;
     }
   } else if (quality >= .8 && quality <= 1.8) {
@@ -446,7 +504,7 @@ function reconcileCardFields(p, stats, read){
   }
 
   /* Procura o level cujos seis IVs não arredondados ficam em 0..32 e perto de inteiros. */
-  if (quality >= .8 && quality <= 1.8) {
+  if (!level && quality >= .8 && quality <= 1.8) {
     let best = null;
     for (let candidate=1; candidate<=999; candidate++) {
       const raw = stats.map((value,i) => ((+value)/((candidate/100)*Math.pow(quality,EXP[i]))-p.baseStats[i])/2);
@@ -514,7 +572,9 @@ async function scanIvImage(file){
       corePath: "/vplab/vendor/tesseract-core",
       langPath: "/vplab/vendor/lang-data"
     };
-    const result = await withOcrTimeout(Tesseract.recognize(file, "por+eng", {
+    const compactLayout = await imageWidth(file) < 500;
+    const ocrImage = compactLayout ? await makeCompactCardImage(file) : file;
+    const result = await withOcrTimeout(Tesseract.recognize(ocrImage, "por+eng", {
       ...ocrPaths,
       logger: (m) => {
         if (m.status === "recognizing text") status.innerHTML = `<span class="scan-loading">Lendo a imagem… <b>${Math.round(m.progress*100)}%</b></span>`;
@@ -531,22 +591,23 @@ async function scanIvImage(file){
     const header = headerValues(headerResult.data.text);
     const raw = result.data.text;
     const text = cleanOcr(raw);
-    const found = findSpeciesInOcr(raw);
+    const compact = compactCardValues(raw);
+    const found = findSpeciesInOcr(`${raw}\n${headerResult.data.text}`);
     if (found) setSpecies(found.slug);
 
     const geo = (patterns, decimal=false) => geometryNumber(result.data, patterns, decimal);
     let values = {
-      level: header.level || ocrNumber(text, ["nivel", "level", "nv\\.?", "lvl"]) || geo([/^nivel/,/^level$/,/^nv$/,/^lvl$/]),
-      quality: header.quality || ocrNumber(text, ["qualidade", "quality"], true) || qualityFromCard(text) || geo([/^qual/,/^quality$/], true),
-      power: header.power || ocrNumber(text, ["power", "poder"]),
-      total: ocrNumber(text, ["iv total", "total iv", "growth total"]) || geo([/^iv$/, /^growth$/]),
+      level: header.level || compact.level || ocrNumber(text, ["nivel", "level", "nv\\.?", "lvl"]) || geo([/^nivel/,/^level$/,/^nv$/,/^lvl$/]),
+      quality: header.quality || compact.quality || ocrNumber(text, ["qualidade", "quality"], true) || qualityFromCard(text) || geo([/^qual/,/^quality$/], true),
+      power: compact.power || header.power || ocrNumber(text, ["power", "poder"]),
+      total: compact.total || ocrNumber(text, ["iv total", "total iv", "growth total"]) || geo([/^iv$/, /^growth$/]),
       stats: [
-        ocrNumber(text,["hp", "vida"]) || geo([/^hp$/, /^vida$/]),
-        ocrNumber(text,["atk\\b", "ataque(?! especial)", "attack(?! special)"]) || geo([/^ataque$/, /^attack$/, /^atk$/]),
-        ocrNumber(text,["def\\b", "defesa(?! especial)", "defense(?! special)"]) || geo([/^defesa$/, /^defense$/, /^def$/]),
-        ocrNumber(text,["spa\\b", "ataque especial", "atq\\.? esp", "special attack", "sp\\.? atk"]) || geo([/^spa$/, /^atq/, /^spatk$/]),
-        ocrNumber(text,["spd\\b", "defesa especial", "def\\.? esp", "special defense", "sp\\.? def"]) || geo([/^spd$/, /^def\.?esp/, /^def\.$/, /^spdef$/]),
-        ocrNumber(text,["vel\\b", "velocidade", "speed"]) || geo([/^vel$/, /^veloc/, /^speed$/])
+        compact.stats[0] || ocrNumber(text,["hp", "vida"]) || geo([/^hp$/, /^vida$/]),
+        compact.stats[1] || ocrNumber(text,["atk\\b", "ataque(?! especial)", "attack(?! special)"]) || geo([/^ataque$/, /^attack$/, /^atk$/]),
+        compact.stats[2] || ocrNumber(text,["def\\b", "defesa(?! especial)", "defense(?! special)"]) || geo([/^defesa$/, /^defense$/, /^def$/]),
+        compact.stats[3] || ocrNumber(text,["spa\\b", "ataque especial", "atq\\.? esp", "special attack", "sp\\.? atk"]) || geo([/^spa$/, /^atq/, /^spatk$/]),
+        compact.stats[4] || ocrNumber(text,["spd\\b", "defesa especial", "def\\.? esp", "special defense", "sp\\.? def"]) || geo([/^spd$/, /^def\.?esp/, /^def\.$/, /^spdef$/]),
+        compact.stats[5] || ocrNumber(text,["vel\\b", "velocidade", "speed"]) || geo([/^vel$/, /^veloc/, /^speed$/])
       ]
     };
     values = reconcileCardFields(found || cur, values.stats, values);
@@ -1040,6 +1101,30 @@ $("#x-species").addEventListener("change", () => setSpecies($("#x-species").valu
 ["x-level", "x-qual", "x-power", "x-ivtotal"].forEach((id) => $("#" + id).addEventListener("input", renderAvaliar));
 STAT_NAMES.forEach((_, i) => $("#o" + i).addEventListener("input", renderAvaliar));
 $("#iv-image").addEventListener("change", (e) => scanIvImage(e.target.files[0]));
+document.addEventListener("paste", (event) => {
+  if (activeTab !== "avaliar") return;
+  const image = [...(event.clipboardData?.items || [])].find((item) => item.type.startsWith("image/"));
+  if (!image) return;
+  event.preventDefault();
+  const file = image.getAsFile();
+  if (file) {
+    $("#iv-scan-status").innerHTML = '<span class="scan-loading">Imagem colada. Preparando leitura…</span>';
+    scanIvImage(file);
+  }
+});
+const ivScanCard = $(".scan-card");
+["dragenter", "dragover"].forEach((name) => ivScanCard.addEventListener(name, (event) => {
+  event.preventDefault();
+  ivScanCard.classList.add("is-dragging");
+}));
+["dragleave", "drop"].forEach((name) => ivScanCard.addEventListener(name, (event) => {
+  event.preventDefault();
+  ivScanCard.classList.remove("is-dragging");
+}));
+ivScanCard.addEventListener("drop", (event) => {
+  const image = [...(event.dataTransfer?.files || [])].find((file) => file.type.startsWith("image/"));
+  if (image) scanIvImage(image);
+});
 
 const ivHelpModal = $("#iv-help-modal");
 function openIvHelp(){
