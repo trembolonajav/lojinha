@@ -354,33 +354,12 @@
         </div>
       </div>
 
-      <!-- Simulador de bônus: escondido temporariamente; será reformulado -->
-      <div id="clan-simulator" hidden>
       <hr class="divider">
-      <h2 class="sec">Quanto o clã turbina o seu Pokémon</h2>
-      <p class="sec-sub">Escolha abaixo o Pokémon que você quer simular. O cálculo considera IV 32.</p>
-      <div class="tool-controls clan-controls" aria-label="Configurar simulação de bônus do clã">
-        <div class="control-title"><strong>Simular bônus do clã</strong><span>Estes dados alteram somente o cálculo abaixo</span></div>
-        <label class="field search-field"><span class="lbl">Pokémon</span><div class="search-input-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="clan-species-search" autocomplete="off" placeholder="Buscar Pokémon por nome ou número..." role="combobox" aria-expanded="false" aria-controls="clan-species-results"><button class="search-clear" type="button" aria-label="Limpar busca" hidden>×</button></div><div class="species-results" id="clan-species-results" role="listbox" hidden></div></label>
-        <label class="field"><span class="lbl">Nível</span><input class="mono" id="clan-level" type="number" min="1" max="999" value="100"></label>
-        <label class="field"><span class="lbl">Qualidade</span><input class="mono" id="clan-quality" type="number" min="0.8" max="1.8" step="0.001" value="1.0"></label>
-        <div class="search-feedback" id="clan-species-feedback" aria-live="polite"></div>
-      </div>
-      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
-        <div class="field">
-          <span class="lbl">Seu rank no clã</span>
-          <div class="seg" id="clan-rank" role="group" aria-label="Rank do clã">
-            <button data-r="0">Fora</button><button data-r="1">1</button><button data-r="2">2</button>
-            <button data-r="3">3</button><button data-r="4">4</button><button data-r="5" aria-pressed="true">5</button>
-          </div>
-        </div>
-        <label style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer">
-          <input type="checkbox" id="clan-covers" checked style="width:auto;accent-color:var(--red-2);cursor:pointer">
-          <span id="clan-covers-lbl">Meu clã cobre o tipo deste Pokémon</span>
-        </label>
-      </div>
-      <div id="clan-out"></div>
-      <p class="note">Os nomes dos 10 clãs e seus elementos ficam atrás do login do jogo — confira no painel de clãs lá dentro qual cobre o tipo do seu Pokémon e marque acima.</p>
+      <div id="clan-app" aria-live="polite"><div class="clan-loading">Carregando os clãs…</div></div>
+      <div id="clan-simulator" hidden>
+        <input id="clan-species-search"><span id="clan-species-feedback"></span><div id="clan-species-results"></div>
+        <input id="clan-level" value="100"><input id="clan-quality" value="1"><input id="clan-covers" type="checkbox" checked>
+        <span id="clan-covers-lbl"></span><div id="clan-rank"><button data-r="5" aria-pressed="true"></button></div><div id="clan-out"></div>
       </div>
     </section>
 
@@ -408,5 +387,6 @@
 <script src="vendor/tesseract.min.js"></script>
 <script src="pokefipe-core.js"></script>
 <script src="app.js"></script>
+<script type="module" src="clan-ui.js"></script>
 </body>
 </html>

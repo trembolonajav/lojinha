@@ -170,6 +170,13 @@ const OUTLAND = OUTLAND_SPECS.map(([nome, slug], i) => {
   const base = window.VPLAB_DEX.find((p) => p.slug === slug);
   return base ? { ...base, nome, baseSlug:slug, slug:`outland-${slug}-${i}`, huntLevel:150, region:"outland" } : null;
 }).filter(Boolean);
+window.VPLAB_CLAN_CONTENT = {
+  availableIds:[...AVAILABLE_DEX],
+  outlandHunts:OUTLAND.map((enemy) => ({
+    id:enemy.slug,name:enemy.nome,region:"outland",requiredLevel:enemy.huntLevel,
+    enemies:[window.VPLAB_DEX.find((pokemon) => pokemon.slug === enemy.baseSlug)]
+  }))
+};
 
 /* ---------------------------------------------- estado */
 let cur = null;
