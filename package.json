@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node dev-server.mjs",
     "build": "node scripts/build.mjs",
-    "check": "node --check dev-server.mjs && node --check scripts/build.mjs && node --check apps/vpertz-store/public/app.js && node --check apps/vpertz-store/public/admin.js && node --check apps/vpertz-lab/public/app.js && node --check apps/vpertz-lab/public/pokefipe-core.js && node --check apps/vpertz-lab/public/data.js",
+    "check": "node --check dev-server.mjs && node --check scripts/build.mjs && node --check apps/vpertz-store/public/app.js && node --check apps/vpertz-store/public/admin.js && node --check apps/vpertz-lab/public/app.js && node --check apps/vpertz-lab/public/iv-scan.js && node --check apps/vpertz-lab/public/pokefipe-core.js && node --check apps/vpertz-lab/public/data.js",
     "test": "node --test --test-concurrency=1",
     "test:e2e": "node tests/e2e-local.mjs",
     "verify": "npm run check && npm test && npm run build && npm run test:e2e"

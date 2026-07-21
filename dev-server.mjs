@@ -19,7 +19,8 @@ const MIME = {
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
-  "Content-Security-Policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+  /* connect-src data: — o núcleo WASM do Tesseract carrega um recurso data:. */
+  "Content-Security-Policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 };
 
 function sendFile(res, file) {
@@ -56,6 +57,15 @@ const server = http.createServer(async (req, res) => {
     if (pathname.startsWith("/uploads/")) {
       const file = path.join(ROOT, ".data", "uploads", path.basename(pathname));
       if (fs.existsSync(file)) return sendFile(res, file);
+      res.writeHead(404, SECURITY_HEADERS); return res.end("Não encontrado");
+    }
+
+    /* Fixtures de teste do OCR — somente no servidor local de desenvolvimento. */
+    if (pathname.startsWith("/fixtures/")) {
+      const fixtureFile = safeStatic(path.join(ROOT, "tests", "fixtures"), pathname.slice("/fixtures".length));
+      if (fixtureFile && fs.existsSync(fixtureFile) && fs.statSync(fixtureFile).isFile()) {
+        return sendFile(res, fixtureFile);
+      }
       res.writeHead(404, SECURITY_HEADERS); return res.end("Não encontrado");
     }
 

@@ -379,7 +379,11 @@ h2.sec{font-size:20px;margin-bottom:4px}
 .scan-button{padding:10px 15px;border-radius:10px;background:linear-gradient(180deg,#cf4030,#8e1d19);border:1px solid rgba(255,255,255,.15);font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
 .scan-button.is-reading{opacity:.65;pointer-events:none}
 .scan-status{grid-column:1/-1;min-height:0;font-size:12px}
-.scan-status:empty{display:none}.scan-status .scan-loading{color:var(--gold)}.scan-status .scan-ok{color:var(--good)}.scan-status .scan-error{color:var(--bad)}
+.scan-status:empty{display:none}.scan-status .scan-loading{color:var(--gold)}.scan-status .scan-ok{color:var(--good)}.scan-status .scan-error{color:var(--bad)}.scan-status .scan-warn{color:var(--mid)}
+.scan-hint{display:block;font-size:10.5px;color:var(--faint);margin-top:4px}
+.scan-preview{grid-column:1/-1;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.scan-preview img{max-width:230px;max-height:160px;border-radius:10px;border:1px solid var(--line-strong);display:block;background:#000}
+.field input.ocr-missing{border-color:rgba(229,179,79,.6);box-shadow:0 0 0 2px rgba(229,179,79,.14)}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .iv-input-grid{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:12px}
 .grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}

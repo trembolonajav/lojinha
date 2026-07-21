@@ -62,18 +62,23 @@ function usefulOffensiveMoves(pokemon) {
 }
 function offensiveProfile(pokemon, clan) {
   const moves = usefulOffensiveMoves(pokemon);
-  let best = null;
-  for (const move of moves) {
-    const statIndex = move.categoria === "fisico" ? 1 : 3;
-    const candidate = {
+  const profiles = [
+    { category:"fisico", statIndex:1 },
+    { category:"especial", statIndex:3 }
+  ].map((profile) => {
+    const categoryMoves = moves.filter((move) => move.categoria === profile.category);
+    const move = categoryMoves.sort((a,b) => Number(b.poder)-Number(a.poder))[0] || null;
+    return move ? {
       move,
-      statIndex,
-      baseStat:pokemon.baseStats[statIndex],
-      impact:pokemon.baseStats[statIndex] * Number(move.poder)
-    };
-    if (!best || candidate.impact > best.impact || (candidate.impact === best.impact && candidate.baseStat > best.baseStat)) best = candidate;
-  }
-  if (best) return best;
+      statIndex:profile.statIndex,
+      baseStat:pokemon.baseStats[profile.statIndex],
+      impact:pokemon.baseStats[profile.statIndex] * Number(move.poder)
+    } : null;
+  }).filter(Boolean);
+  /* O ranking parte do maior atributo ofensivo que o Pokémon consegue usar.
+     O poder do golpe só desempata perfis com o mesmo atributo base. */
+  profiles.sort((a,b) => b.baseStat-a.baseStat || b.impact-a.impact);
+  if (profiles[0]) return profiles[0];
   const physical = pokemon.baseStats[1] >= pokemon.baseStats[3];
   return { move:null, statIndex:physical ? 1 : 3, baseStat:pokemon.baseStats[physical ? 1 : 3], impact:0 };
 }

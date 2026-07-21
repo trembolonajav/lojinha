@@ -1,0 +1,43 @@
+{
+  "_comment": "Valores esperados por fixture real. pokemon:null = o nome não está impresso no card. ivTotal:null = o card grande não exibe IV; nesse layout o campo é opcional.",
+  "scizor-card-grande.png": {
+    "pokemon": "Scizor", "level": 302, "quality": 1.78, "ivTotal": null, "ivMaximum": null,
+    "power": 6661, "hp": 575, "attack": 766, "defense": 747, "specialAttack": 560, "specialDefense": 556, "speed": 538
+  },
+  "scizor-nv303-recorte.png": {
+    "pokemon": null, "level": 303, "quality": 1.78, "ivTotal": 131, "ivMaximum": 192,
+    "power": 6682, "hp": 576, "attack": 769, "defense": 750, "specialAttack": 562, "specialDefense": 557, "speed": 540
+  },
+  "gyarados-equipe.png": {
+    "pokemon": "Gyarados", "level": 1, "quality": 1.70, "ivTotal": 140, "ivMaximum": 192,
+    "power": 24, "hp": 3, "attack": 3, "defense": 2, "specialAttack": 3, "specialDefense": 2, "speed": 2
+  },
+  "gyarados-equipe-2.png": {
+    "pokemon": "Gyarados", "level": 1, "quality": 1.70, "ivTotal": 140, "ivMaximum": 192,
+    "power": 24, "hp": 3, "attack": 3, "defense": 2, "specialAttack": 3, "specialDefense": 2, "speed": 2
+  },
+  "gyarados-guardado.png": {
+    "pokemon": "Gyarados", "level": 1, "quality": 1.72, "ivTotal": 129, "ivMaximum": 192,
+    "power": 22, "hp": 2, "attack": 3, "defense": 2, "specialAttack": 2, "specialDefense": 2, "speed": 2
+  },
+  "gengar-guardado.png": {
+    "pokemon": "Gengar", "level": 1, "quality": 1.78, "ivTotal": 139, "ivMaximum": 192,
+    "power": 25, "hp": 2, "attack": 2, "defense": 2, "specialAttack": 3, "specialDefense": 2, "speed": 3
+  },
+  "scizor-ativo-1.png": {
+    "pokemon": "Scizor", "level": 336, "quality": 1.78, "ivTotal": 131, "ivMaximum": 192,
+    "power": 7412, "hp": 639, "attack": 853, "defense": 831, "specialAttack": 624, "specialDefense": 618, "speed": 599
+  },
+  "scizor-ativo-2.png": {
+    "pokemon": "Scizor", "level": 336, "quality": 1.78, "ivTotal": 131, "ivMaximum": 192,
+    "power": 7412, "hp": 639, "attack": 853, "defense": 831, "specialAttack": 624, "specialDefense": 618, "speed": 599
+  },
+  "scizor-ativo-3.png": {
+    "pokemon": "Scizor", "level": 336, "quality": 1.78, "ivTotal": 131, "ivMaximum": 192,
+    "power": 7412, "hp": 639, "attack": 853, "defense": 831, "specialAttack": 624, "specialDefense": 618, "speed": 599
+  },
+  "scizor-ativo-150.png": {
+    "pokemon": "Scizor", "level": 336, "quality": 1.78, "ivTotal": 131, "ivMaximum": 192,
+    "power": 7412, "hp": 639, "attack": 853, "defense": 831, "specialAttack": 624, "specialDefense": 618, "speed": 599
+  }
+}
