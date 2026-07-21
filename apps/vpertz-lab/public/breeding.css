@@ -1,6 +1,255 @@
-.breeding-lab{overflow:hidden;padding:0!important;scroll-behavior:smooth}.breeding-lab button,.breeding-lab a{font:inherit}.breeding-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(290px,.75fr);gap:34px;padding:44px;background:radial-gradient(circle at 76% 15%,rgba(207,70,34,.15),transparent 32%),linear-gradient(135deg,#180e0b,#0c0807 70%);border-bottom:1px solid rgba(211,122,58,.25)}.breeding-hero-copy{align-self:center}.breeding-hero .sec{font-size:clamp(2rem,4vw,3.35rem);margin:8px 0 10px}.breeding-hero .sec-sub{max-width:720px;margin:0;line-height:1.65}.breeding-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:24px}.breeding-actions a,.breeding-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #b64928;font-weight:800;cursor:pointer;text-decoration:none}.breeding-actions a{background:linear-gradient(180deg,#d96834,#a72f1e);color:#fff}.breeding-actions button{background:#160e0b;color:#e8c4ab}.breeding-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px;border:1px solid rgba(222,154,77,.3);border-radius:17px;background:rgba(14,10,8,.78);box-shadow:0 22px 60px rgba(0,0,0,.3)}.breeding-summary div{padding:13px 8px;text-align:center;border:1px solid rgba(255,255,255,.07);border-radius:11px;background:rgba(255,255,255,.025)}.breeding-summary b,.breeding-summary span{display:block}.breeding-summary b{color:#f1c56d}.breeding-summary span{margin-top:4px;color:#9f8e84;font-size:.7rem;text-transform:uppercase}.breeding-summary p{grid-column:1/-1;margin:2px 0 0;padding:13px;border-radius:10px;background:rgba(174,47,30,.12);color:#bbaaa0;line-height:1.45;font-size:.86rem}.breeding-summary strong{color:#ffae91}.breeding-jumps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:16px 24px;border-bottom:1px solid rgba(211,122,58,.18);background:#0c0807;position:sticky;top:0;z-index:3}.breeding-jumps a{padding:8px 13px;border:1px solid rgba(211,122,58,.2);border-radius:999px;color:#baa89d;text-decoration:none;font-size:.78rem;font-weight:800}.breeding-jumps a:hover{color:#fff0df;border-color:#c56434}.breeding-block{padding:42px 44px;scroll-margin-top:90px}.breeding-block+.breeding-block{border-top:1px solid rgba(211,122,58,.18)}.breeding-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.breeding-heading h3{margin:6px 0 0;font-family:Cinzel,serif;color:#f3e8df;font-size:clamp(1.45rem,2.4vw,2.05rem)}.breeding-heading p{max-width:780px;margin:8px 0 0;color:#aa978d;line-height:1.6}.breeding-tag{padding:7px 11px;border:1px solid rgba(225,166,73,.35);border-radius:999px;color:#e5b34f;font-size:.72rem;font-weight:800;text-transform:uppercase}.breeding-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.screen-grid{grid-template-columns:minmax(0,1.35fr) minmax(310px,.65fr)}.breeding-shot{position:relative;display:block;padding:10px;border:1px solid rgba(211,122,58,.35);border-radius:15px;background:#0b0807;cursor:zoom-in;overflow:hidden}.breeding-shot img{display:block;width:100%;border-radius:9px}.breeding-shot span{position:absolute;right:20px;bottom:20px;padding:7px 10px;border-radius:8px;background:rgba(5,3,3,.88);color:#e5c9b5;font-size:.7rem;font-weight:800}.breeding-shot.compact{align-self:center}.breeding-steps{list-style:none;counter-reset:breed;padding:0;margin:0;display:grid;gap:9px}.breeding-steps li{counter-increment:breed;position:relative;padding:14px 14px 14px 54px;border:1px solid rgba(255,255,255,.075);border-radius:12px;background:rgba(255,255,255,.025)}.breeding-steps li:before{content:counter(breed,decimal-leading-zero);position:absolute;left:14px;top:15px;color:#d76836;font-family:Cinzel,serif;font-weight:800}.breeding-steps b,.breeding-steps span{display:block}.breeding-steps b{color:#ecddd3}.breeding-steps span{margin-top:4px;color:#9c8a81;font-size:.82rem;line-height:1.45}.quality-grid{grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr)}.breeding-route,.breeding-compare article,.breeding-note,.breeding-rules article,.progress-card,.breeding-costs article{border:1px solid rgba(211,122,58,.22);border-radius:14px;background:linear-gradient(145deg,rgba(29,19,15,.9),rgba(13,9,8,.92))}.breeding-route{overflow:hidden}.breeding-switch{display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:8px}.breeding-switch button{padding:11px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:#110c0a;color:#a99589;font-weight:800;cursor:pointer}.breeding-switch button.active{border-color:#c46537;background:linear-gradient(180deg,#3b1b11,#24100c);color:#ffd18b}.route-image{display:block;width:100%;padding:0;border:0;background:#090706;cursor:zoom-in}.route-image img{display:block;width:100%}.route-copy{padding:16px 18px}.route-copy b{color:#f0d394}.route-copy p{margin:6px 0 0;color:#a99589;line-height:1.55;font-size:.86rem}.breeding-compare{display:grid;gap:12px}.breeding-compare article{padding:18px}.breeding-compare span,.breeding-compare b{display:block}.breeding-compare span{color:#d36b3a;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.breeding-compare b{margin-top:6px;color:#eadbd2}.breeding-compare p{margin:6px 0 0;color:#9d8b81;line-height:1.5;font-size:.84rem}.breeding-note{padding:16px!important;color:#c6ac82!important}.iv-grid{grid-template-columns:minmax(320px,.85fr) minmax(0,1.15fr)}.breeding-rules{display:grid;gap:10px}.breeding-rules article{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:15px}.breeding-rules i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#4a1d12;color:#f1b967;font-style:normal;font-weight:900}.breeding-rules b{color:#e9dbd2}.breeding-rules p{margin:5px 0 0;color:#9b8980;font-size:.83rem;line-height:1.5}.incubation-grid{grid-template-columns:minmax(0,.8fr) minmax(340px,1.2fr)}.progress-card{padding:26px}.breeding-egg{width:76px;height:96px;margin:0 auto 22px;border:3px solid #e1b461;border-radius:50% 50% 46% 46%/58% 58% 42% 42%;background:radial-gradient(circle at 36% 31%,#fff3bd 0 7%,transparent 8%),radial-gradient(circle at 66% 57%,#bd5d35 0 10%,transparent 11%),linear-gradient(145deg,#f4d784,#bd772b);box-shadow:0 10px 34px rgba(219,151,55,.2)}.breeding-egg.warming{animation:breed-wiggle .55s ease-in-out infinite alternate}.breeding-egg.ready{filter:drop-shadow(0 0 18px rgba(255,197,79,.65));transform:scale(1.06)}@keyframes breed-wiggle{from{transform:rotate(-3deg)}to{transform:rotate(3deg) translateY(-2px)}}.progress-head{display:flex;justify-content:space-between;gap:12px;color:#a89489}.progress-head b{color:#f1c15e}.progress-track{height:12px;margin-top:12px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#080605;overflow:hidden}.progress-track i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#b64227,#f0bf55);transition:width .12s}.progress-actions{display:flex;gap:9px;margin-top:18px}.progress-actions button{padding:10px 14px;border:1px solid #894026;border-radius:9px;background:#2c130d;color:#f2c992;font-weight:800;cursor:pointer}.progress-card small{display:block;margin-top:12px;color:#786b64}.breeding-costs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.breeding-costs article{padding:16px}.breeding-costs b,.breeding-costs span{display:block}.breeding-costs b{color:#e7d5ca}.breeding-costs span{margin-top:5px;color:#97867c;font-size:.8rem;line-height:1.45}.breeding-faq{display:grid;grid-template-columns:1fr 1fr;gap:10px}.breeding-faq details{border:1px solid rgba(211,122,58,.2);border-radius:12px;background:rgba(21,14,11,.75)}.breeding-faq summary{display:flex;justify-content:space-between;gap:12px;padding:17px;cursor:pointer;color:#e6d8cf;font-weight:800}.breeding-faq summary:after{content:"+";color:#d66a37}.breeding-faq details[open] summary:after{transform:rotate(45deg)}.breeding-faq p{margin:0;padding:0 17px 17px;color:#9e8c82;line-height:1.55}.breeding-lightbox{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:28px;background:rgba(3,2,2,.93)}.breeding-lightbox[hidden]{display:none}.breeding-lightbox img{display:block;max-width:min(1500px,95vw);max-height:88vh;border:1px solid #9c4a29;border-radius:13px;box-shadow:0 30px 90px #000}.breeding-lightbox>button{position:fixed;right:25px;top:20px;width:44px;height:44px;border:1px solid #8f4b2e;border-radius:50%;background:#1b0f0b;color:#fff;font-size:1.6rem;cursor:pointer}@media(max-width:900px){.breeding-hero,.breeding-grid,.screen-grid,.quality-grid,.iv-grid,.incubation-grid{grid-template-columns:1fr}.breeding-costs{grid-template-columns:1fr 1fr}.breeding-summary{max-width:620px}.breeding-shot.compact{max-width:650px}.breeding-jumps{position:static}}@media(max-width:600px){.breeding-hero,.breeding-block{padding:28px 18px}.breeding-summary{grid-template-columns:1fr}.breeding-summary p{grid-column:auto}.breeding-costs,.breeding-faq{grid-template-columns:1fr}.breeding-heading{align-items:start}.breeding-tag{display:none}.breeding-jumps{justify-content:flex-start;overflow:auto;flex-wrap:nowrap}.breeding-jumps a{white-space:nowrap}}@media(prefers-reduced-motion:reduce){.breeding-lab *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-.breeding-lab{width:100%;max-width:100%;min-width:0}.breeding-hero-copy,.breeding-heading>div{min-width:0}.breeding-hero .sec{overflow-wrap:anywhere}@media(max-width:600px){.breeding-actions>a,.breeding-actions>button{flex:1 1 140px;padding-inline:10px;font-size:.84rem}}
-.breeding-summary{grid-template-columns:repeat(2,1fr)}
-.breeding-lab .breeding-summary{grid-template-columns:repeat(2,1fr)}
-@media(max-width:600px){.breeding-lab .breeding-summary{grid-template-columns:1fr}}
-.breeding-lab .incubation-info{display:flex;flex-direction:column;justify-content:center;padding:30px;border:1px solid rgba(211,122,58,.22);border-radius:14px;background:linear-gradient(145deg,rgba(29,19,15,.9),rgba(13,9,8,.92))}.breeding-lab .incubation-number{color:#efbf59;font:800 clamp(2.7rem,6vw,5rem) Cinzel,serif;line-height:1}.breeding-lab .incubation-info>b{margin-top:6px;color:#eadbd2;font-size:1.05rem}.breeding-lab .incubation-info p{margin:16px 0 0;color:#a39085;line-height:1.65}.breeding-lab .incubation-info small{margin-top:16px;color:#786b64}.breeding-lab .breeding-faq article{border:1px solid rgba(211,122,58,.2);border-radius:12px;background:rgba(21,14,11,.75);overflow:hidden}.breeding-lab .breeding-faq article>button{display:flex;align-items:center;justify-content:space-between;gap:15px;width:100%;padding:17px;border:0;background:transparent;color:#e6d8cf;text-align:left;font-weight:800;cursor:pointer}.breeding-lab .breeding-faq article>button i{color:#d66a37;font-size:1.25rem;font-style:normal}.breeding-lab .breeding-faq article>p{margin:0;padding:0 17px 17px;color:#9e8c82;line-height:1.55}.breeding-lab .breeding-faq article>p[hidden]{display:none!important}
+/* ============================================================
+   VPLab — aba de Breeding
+   Uma regra principal por componente. Cores derivam dos tokens do
+   design system (styles.css); o laranja-brasa é a assinatura própria
+   da aba e vive nas variáveis --breed-* declaradas abaixo.
+   Escala tipográfica alinhada ao restante do VPLab:
+   11 / 12 / 13 / 14 / 16 / 20 / 26px + display em clamp.
+   ============================================================ */
+
+.breeding-lab{
+  /* Paleta local da aba, ancorada nos tokens globais onde eles casam. */
+  --breed-ember:#d76836;                                            /* laranja de destaque */
+  --breed-ember-deep:#a72f1e;                                       /* base do gradiente do CTA */
+  --breed-ember-strong:#c46537;                                     /* bordas ativas */
+  --breed-line:color-mix(in srgb, var(--breed-ember) 22%, transparent);
+  --breed-line-soft:color-mix(in srgb, var(--breed-ember) 18%, transparent);
+  --breed-panel:linear-gradient(145deg, rgba(29,19,15,.9), rgba(13,9,8,.92));
+  --breed-inset:rgba(255,255,255,.025);
+  --breed-inset-line:rgba(255,255,255,.075);
+
+  /* overflow:clip recorta o sangramento do hero no border-radius do .card
+     igual ao antigo overflow:hidden, mas NÃO cria um contêiner de rolagem —
+     por isso a barra de atalhos volta a funcionar como sticky. */
+  overflow:clip;
+  width:100%;max-width:100%;min-width:0;
+  padding:0!important;
+}
+.breeding-lab button,.breeding-lab a{font:inherit}
+
+/* ---------------------------------------------------------- hero */
+.breeding-hero{
+  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(290px,.75fr);gap:34px;
+  padding:44px;
+  background:
+    radial-gradient(circle at 76% 15%, color-mix(in srgb, var(--red-2) 30%, transparent), transparent 32%),
+    linear-gradient(135deg,#180e0b,#0c0807 70%);
+  border-bottom:1px solid var(--breed-line);
+}
+.breeding-hero-copy{align-self:center;min-width:0}
+.breeding-hero .sec{margin:8px 0 10px;font-size:clamp(28px,4vw,52px);overflow-wrap:anywhere}
+.breeding-hero .sec-sub{max-width:720px;margin:0;line-height:1.65}
+
+.breeding-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:24px}
+.breeding-actions a,.breeding-actions button{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 18px;border-radius:10px;
+  border:1px solid var(--breed-ember-strong);font-size:13px;font-weight:800;
+  cursor:pointer;text-decoration:none;
+}
+.breeding-actions a{background:linear-gradient(180deg,var(--breed-ember),var(--breed-ember-deep));color:#fff}
+.breeding-actions button{background:var(--surface);color:color-mix(in srgb, var(--cream) 72%, var(--breed-ember))}
+
+.breeding-summary{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  padding:18px;border:1px solid var(--line-strong);border-radius:17px;
+  background:rgba(14,10,8,.78);box-shadow:0 22px 60px rgba(0,0,0,.3);
+}
+.breeding-summary div{
+  padding:13px 8px;text-align:center;
+  border:1px solid var(--breed-inset-line);border-radius:11px;background:var(--breed-inset);
+}
+.breeding-summary b,.breeding-summary span{display:block}
+.breeding-summary b{color:color-mix(in srgb, var(--gold) 75%, var(--cream));font-size:16px}
+.breeding-summary span{margin-top:4px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.breeding-summary p{
+  grid-column:1/-1;margin:2px 0 0;padding:13px;border-radius:10px;
+  background:color-mix(in srgb, var(--red) 14%, transparent);
+  color:var(--muted);font-size:13px;line-height:1.5;
+}
+.breeding-summary strong{color:color-mix(in srgb, var(--bad) 80%, var(--cream))}
+
+/* ---------------------------------------------------------- barra de atalhos */
+.breeding-jumps{
+  position:sticky;
+  /* para logo abaixo do header real; --site-header-offset zera sozinho
+     quando o header deixa de ser sticky (≤1180px) */
+  top:var(--site-header-offset);
+  z-index:5;                                    /* acima do conteúdo, abaixo do header (40) */
+  display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+  padding:12px 24px;
+  border-bottom:1px solid var(--breed-line-soft);
+  background:#0c0807;
+}
+.breeding-jumps a{
+  display:inline-flex;align-items:center;min-height:36px;padding:0 13px;
+  border:1px solid var(--breed-line);border-radius:999px;
+  color:var(--muted);text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap;
+}
+.breeding-jumps a:hover{color:var(--cream);border-color:var(--breed-ember-strong)}
+
+/* ---------------------------------------------------------- blocos */
+.breeding-block{
+  padding:42px 44px;
+  /* âncora para abaixo do header + barra de atalhos + respiro */
+  scroll-margin-top:calc(var(--site-header-offset) + var(--breed-jumps-height,60px) + 14px);
+}
+.breeding-block+.breeding-block{border-top:1px solid var(--breed-line-soft)}
+
+.breeding-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}
+.breeding-heading>div{min-width:0}
+.breeding-heading h3{margin:6px 0 0;font-family:Cinzel,serif;color:var(--cream);font-size:clamp(20px,2.4vw,32px)}
+.breeding-heading p{max-width:780px;margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.6}
+.breeding-tag{
+  padding:7px 11px;border:1px solid var(--line-strong);border-radius:999px;
+  color:var(--gold);font-size:11px;font-weight:800;text-transform:uppercase;white-space:nowrap;
+}
+
+.breeding-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.screen-grid{grid-template-columns:minmax(0,1.35fr) minmax(310px,.65fr)}
+.quality-grid{grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr)}
+.iv-grid{grid-template-columns:minmax(320px,.85fr) minmax(0,1.15fr)}
+.incubation-grid{grid-template-columns:minmax(0,.8fr) minmax(340px,1.2fr)}
+
+/* ---------------------------------------------------------- capturas de tela */
+.breeding-shot{
+  position:relative;display:block;width:100%;padding:10px;
+  border:1px solid color-mix(in srgb, var(--breed-ember) 35%, transparent);
+  border-radius:15px;background:#0b0807;cursor:zoom-in;overflow:hidden;
+}
+.breeding-shot img{display:block;width:100%;height:auto;border-radius:9px}
+.breeding-shot span{
+  position:absolute;right:20px;bottom:20px;padding:7px 10px;border-radius:8px;
+  background:rgba(5,3,3,.88);color:var(--cream);font-size:11px;font-weight:800;
+}
+.breeding-shot.compact{align-self:center}
+.breeding-figure{display:grid;gap:9px;margin:0;min-width:0}
+.breeding-figure figcaption{color:var(--muted);font-size:12px;line-height:1.5}
+.breeding-figure figcaption b{color:var(--cream)}
+
+/* ---------------------------------------------------------- etapas */
+.breeding-steps{list-style:none;counter-reset:breed;padding:0;margin:0;display:grid;gap:9px}
+.breeding-steps li{
+  counter-increment:breed;position:relative;padding:14px 14px 14px 54px;
+  border:1px solid var(--breed-inset-line);border-radius:12px;background:var(--breed-inset);
+}
+.breeding-steps li::before{
+  content:counter(breed,decimal-leading-zero);position:absolute;left:14px;top:15px;
+  color:var(--breed-ember);font-family:Cinzel,serif;font-weight:800;
+}
+.breeding-steps b,.breeding-steps span{display:block}
+.breeding-steps b{color:var(--cream);font-size:14px}
+.breeding-steps span{margin-top:4px;color:var(--muted);font-size:13px;line-height:1.5}
+
+/* ---------------------------------------------------------- superfícies compartilhadas */
+.breeding-route,
+.breeding-compare article,
+.breeding-note,
+.breeding-rules article,
+.breeding-costs article,
+.incubation-info{
+  border:1px solid var(--breed-line);border-radius:14px;background:var(--breed-panel);
+}
+
+/* ---------------------------------------------------------- rota de quality */
+.breeding-route{overflow:hidden}
+.breeding-switch{display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:8px}
+.breeding-switch button{
+  min-height:44px;padding:11px;border:1px solid var(--breed-inset-line);border-radius:9px;
+  background:#110c0a;color:var(--muted);font-size:13px;font-weight:800;cursor:pointer;
+}
+.breeding-switch button[aria-pressed="true"]{
+  border-color:var(--breed-ember-strong);
+  background:linear-gradient(180deg,#3b1b11,#24100c);
+  color:color-mix(in srgb, var(--gold) 75%, #fff);
+}
+.route-image{display:block;width:100%;padding:0;border:0;background:#090706;cursor:zoom-in}
+.route-image img{display:block;width:100%;height:auto}
+.route-copy{padding:16px 18px}
+.route-copy b{color:color-mix(in srgb, var(--gold) 60%, var(--cream));font-size:14px}
+.route-copy p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+
+.breeding-compare{display:grid;gap:12px}
+.breeding-compare article{padding:18px}
+.breeding-compare span,.breeding-compare b{display:block}
+.breeding-compare span{color:var(--breed-ember);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.breeding-compare b{margin-top:6px;color:var(--cream);font-size:14px}
+.breeding-compare p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+.breeding-note{padding:16px;color:color-mix(in srgb, var(--gold) 55%, var(--muted));font-size:13px;line-height:1.55}
+.breeding-note b{color:var(--gold)}
+
+/* ---------------------------------------------------------- regras de IV */
+.breeding-rules{display:grid;gap:10px}
+.breeding-rules article{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:15px}
+.breeding-rules i{
+  display:grid;place-items:center;width:32px;height:32px;border-radius:50%;
+  background:#4a1d12;color:var(--gold);font-style:normal;font-weight:900;font-size:13px;
+}
+.breeding-rules b{color:var(--cream);font-size:14px}
+.breeding-rules p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+
+/* ---------------------------------------------------------- incubação */
+.incubation-info{display:flex;flex-direction:column;justify-content:center;padding:30px}
+.incubation-number{color:var(--gold);font:800 clamp(40px,6vw,72px)/1 Cinzel,serif}
+.incubation-info>b{margin-top:6px;color:var(--cream);font-size:16px}
+.incubation-info p{margin:16px 0 0;color:var(--muted);font-size:14px;line-height:1.65}
+.incubation-info small{margin-top:16px;color:var(--muted);font-size:12px}
+
+.breeding-costs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.breeding-costs article{padding:16px}
+.breeding-costs b,.breeding-costs span{display:block}
+.breeding-costs b{color:var(--cream);font-size:14px}
+.breeding-costs span{margin-top:5px;color:var(--muted);font-size:13px;line-height:1.45}
+
+/* ---------------------------------------------------------- FAQ */
+.breeding-faq{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.breeding-faq article{
+  border:1px solid var(--breed-line);border-radius:12px;
+  background:rgba(21,14,11,.75);overflow:hidden;
+}
+.breeding-faq article>button{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  width:100%;min-height:44px;padding:17px;border:0;background:transparent;
+  color:var(--cream);text-align:left;font-size:14px;font-weight:800;cursor:pointer;
+}
+.breeding-faq article>button i{color:var(--breed-ember);font-size:20px;font-style:normal;line-height:1}
+.breeding-faq article>div{margin:0;padding:0 17px 17px;color:var(--muted);font-size:13px;line-height:1.6}
+.breeding-faq article>div[hidden]{display:none!important}
+
+/* ---------------------------------------------------------- lightbox */
+.breeding-lightbox{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:28px;background:rgba(3,2,2,.93)}
+.breeding-lightbox[hidden]{display:none}
+.breeding-lightbox img{
+  display:block;max-width:min(1500px,95vw);max-height:88vh;
+  border:1px solid var(--breed-ember-strong);border-radius:13px;box-shadow:0 30px 90px #000;
+}
+.breeding-lightbox>button{
+  position:fixed;right:25px;top:20px;width:44px;height:44px;
+  border:1px solid var(--breed-ember-strong);border-radius:50%;
+  background:#1b0f0b;color:var(--cream);font-size:26px;line-height:1;cursor:pointer;
+}
+
+/* ---------------------------------------------------------- responsivo */
+@media(max-width:900px){
+  .breeding-hero,.breeding-grid,.screen-grid,.quality-grid,.iv-grid,.incubation-grid{grid-template-columns:1fr}
+  .breeding-costs{grid-template-columns:1fr 1fr}
+  .breeding-summary{max-width:620px}
+  .breeding-shot.compact{max-width:650px}
+}
+@media(max-width:600px){
+  .breeding-hero,.breeding-block{padding:28px 18px}
+  .breeding-summary{grid-template-columns:1fr}
+  .breeding-summary p{grid-column:auto}
+  .breeding-costs,.breeding-faq{grid-template-columns:1fr}
+  .breeding-heading{align-items:start}
+  .breeding-tag{display:none}
+  .breeding-actions>a,.breeding-actions>button{flex:1 1 140px;padding-inline:10px}
+  /* atalhos viram uma faixa compacta com rolagem horizontal, nunca várias linhas.
+     Alvo de toque sobe para 40px sem inflar demais a barra (fica em ~60px). */
+  .breeding-jumps{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:10px 18px;scrollbar-width:none}
+  .breeding-jumps::-webkit-scrollbar{display:none}
+  .breeding-jumps a{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+  .breeding-lab *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}

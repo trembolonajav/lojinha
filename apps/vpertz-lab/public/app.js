@@ -184,7 +184,6 @@ window.VPLAB_CLAN_CONTENT = {
 let cur = null;
 let activeTab = "perfil";
 let rotaRegion = "kanto", rotaManual = false, routePokemonSelected = false;
-let clanRank = 5;
 let pokedexSelected = null;
 
 function syncUrl(){
@@ -655,36 +654,6 @@ function renderRota(){
   }));
 }
 
-/* ---------------------------------------------- render: clãs */
-function renderClan(){
-  const p = cur;
-  const lvl = num($("#clan-level").value) || 100;
-  const q = num($("#clan-quality").value) || 1;
-  const covers = $("#clan-covers").checked;
-  $("#clan-covers-lbl").textContent = `Meu clã cobre o tipo deste Pokémon (${p.tipos.map((t) => TYPE_LABEL[t]).join("/")})`;
-
-  const effRank = covers ? clanRank : 0;
-  const mult = 1 + 0.06 * effRank;
-  const pct = Math.round(6 * effRank);
-  const alvo = [ {i:1, nm:"Ataque"}, {i:3, nm:"Atq. Especial"}, {i:2, nm:"Defesa"}, {i:4, nm:"Def. Especial"} ];
-
-  const badges = alvo.map((o) => {
-    const base = statAt(p.baseStats[o.i], 32, lvl, q, o.i);
-    const boosted = Math.round(base * mult);
-    return `<div class="badge"><div class="k">${o.nm}</div><div class="v mono">${boosted}${effRank ? `<small> · era ${base}</small>` : ""}</div></div>`;
-  }).join("");
-
-  $("#clan-out").innerHTML = `
-    <div class="callout" style="margin-bottom:14px">${
-      effRank
-        ? `No <b>Rank ${clanRank}</b>, o ${esc(p.nome)} luta com <b>+${pct}%</b> de Ataque, Atq. Esp., Defesa e Def. Esp.`
-        : covers
-          ? "Fora de clã — stats de combate sem bônus."
-          : `Seu clã não cobre ${p.tipos.map((t) => TYPE_LABEL[t]).join("/")} — sem bônus para este Pokémon.`
-    }</div>
-    <div class="badges">${badges}</div>`;
-}
-
 /* ---------------------------------------------- Pokédex */
 function renderPokedex(){
   const box = $("#pokedex-content");
@@ -891,13 +860,11 @@ function renderActive(){
   else if (activeTab === "pokedex") renderPokedex();
   else if (activeTab === "avaliar") renderAvaliar();
   else if (activeTab === "rota") renderRota();
-  else if (activeTab === "clas") renderClan();
 }
 
 function setSpecies(slug){
   cur = ALL_DEX.find((p) => p.slug === slug) || DEX[0];
   $("#species-search").value = cur.nome;
-  $("#clan-species-search").value = cur.nome;
   $("#iv-species-search").value = cur.nome;
   $$(".search-input-wrap").forEach((wrap) => { wrap.querySelector(".search-clear").hidden = !wrap.querySelector("input").value; });
   $("#x-species-sprite").src = spriteUrl(cur.dexNo);
@@ -1016,7 +983,6 @@ function bindSpeciesSearch(inputId, feedbackId, resultsId, pool = DEX, onChoose 
   });
 }
 bindSpeciesSearch("species-search", "species-feedback", "species-results");
-bindSpeciesSearch("clan-species-search", "clan-species-feedback", "clan-species-results", ALL_DEX);
 bindSpeciesSearch("iv-species-search", "iv-species-feedback", "iv-species-results", ALL_DEX);
 bindSpeciesSearch("route-species-search", "route-species-feedback", "route-species-results", ALL_DEX);
 bindSpeciesSearch("pokedex-species-search", "pokedex-species-feedback", "pokedex-species-results", ALL_DEX, (pokemon) => {
@@ -1025,7 +991,6 @@ bindSpeciesSearch("pokedex-species-search", "pokedex-species-feedback", "pokedex
 });
 $("#x-species").addEventListener("change", () => setSpecies($("#x-species").value));
 ["level", "quality"].forEach((id) => $("#" + id).addEventListener("input", renderActive));
-["clan-level", "clan-quality"].forEach((id) => $("#" + id).addEventListener("input", renderClan));
 ["x-level", "x-qual", "x-power", "x-ivtotal"].forEach((id) => $("#" + id).addEventListener("input", renderAvaliar));
 STAT_NAMES.forEach((_, i) => $("#o" + i).addEventListener("input", renderAvaliar));
 $("#iv-image").addEventListener("change", (e) => scanIvImage(e.target.files[0]));
@@ -1144,12 +1109,23 @@ $("#lab-fipe-form").addEventListener("input", () => {
 [$("#pokedex-type"), $("#pokedex-rarity")].forEach((control) => control.addEventListener("change", () => { pokedexSelected = null; renderPokedex(); }));
 $("#pokedex-species-search").parentElement.querySelector(".search-clear").addEventListener("click", () => { pokedexSelected = null; renderPokedex(); });
 
-$$("#clan-rank button").forEach((b) => b.addEventListener("click", () => {
-  clanRank = +b.dataset.r;
-  $$("#clan-rank button").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
-  renderClan();
-}));
-$("#clan-covers").addEventListener("change", renderClan);
+
+/* Publica a altura medida do header em --site-header-height, inclusive quando
+   ele ganha uma segunda linha de abas. Aqui só medimos: quem decide se esse
+   valor vira deslocamento é o CSS (--site-header-offset), porque no breakpoint
+   em que o header deixa de ser sticky o deslocamento precisa ser zero mesmo que
+   nenhum evento de resize chegue a disparar. */
+(function trackHeaderHeight(){
+  const header = $("body > header");
+  if (!header) return;
+  const apply = () => {
+    const height = Math.round(header.getBoundingClientRect().height);
+    document.documentElement.style.setProperty("--site-header-height", `${height}px`);
+  };
+  apply();
+  if (typeof ResizeObserver === "function") new ResizeObserver(apply).observe(header);
+  window.addEventListener("resize", apply);
+})();
 
 /* loja: só linka quando tiver endereço publicado */
 (function initStore(){
@@ -1165,7 +1141,6 @@ $("#clan-covers").addEventListener("change", renderClan);
   const slug = u.searchParams.get("p");
   cur = DEX.find((p) => p.slug === slug) || DEX.find((p) => p.slug === "scizor") || DEX[0];
   $("#species-search").value = "";
-  $("#clan-species-search").value = "";
   $("#iv-species-search").value = "";
   $("#route-species-search").value = "";
   $("#x-species-sprite").src = SPRITE_PLACEHOLDER;

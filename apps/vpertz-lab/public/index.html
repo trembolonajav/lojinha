@@ -346,35 +346,32 @@
       <h2 class="sec">Clãs: o que dão e como subir</h2>
       <p class="sec-sub">Regras oficiais da Pokepedia — 10 clãs, cada um cobrindo elementos. O bônus só vale para Pokémon dos elementos do seu clã.</p>
 
-      <div class="clan-cards clan-guide">
-        <div class="clan-card">
-          <h3>Como funciona</h3>
-          <div class="clan-facts">
-            <div><span class="fact-value">Nv 80</span><span>Entrada grátis no Rank 1</span></div>
-            <div><span class="fact-value">💎 40 → 60 → 80</span><span>Custo crescente para trocar</span></div>
-            <div><span class="fact-value">+6% por rank</span><span>Ataque, Atq. Esp., Defesa e Def. Esp.</span></div>
-            <div><span class="fact-value">+30%</span><span>Máximo no Rank 5, apenas nos elementos cobertos</span></div>
+      <details class="clan-rules">
+        <summary>Como funciona o sistema (entrada, custos e missões)</summary>
+        <div class="clan-cards clan-guide">
+          <div class="clan-card">
+            <h3>Como funciona</h3>
+            <div class="clan-facts">
+              <div><span class="fact-value">Nv 80</span><span>Entrada grátis no Rank 1</span></div>
+              <div><span class="fact-value">💎 40 → 60 → 80</span><span>Custo crescente para trocar</span></div>
+              <div><span class="fact-value">+6% por rank</span><span>Ataque, Atq. Esp., Defesa e Def. Esp.</span></div>
+              <div><span class="fact-value">+30%</span><span>Máximo no Rank 5, apenas nos elementos cobertos</span></div>
+            </div>
+          </div>
+          <div class="clan-card">
+            <h3>Subindo de rank (missões)</h3>
+            <ol class="rank-steps">
+              <li><b>Rank 2 · Nv 90</b><span>Pular: 1,5KK · recompensa: 210k XP</span></li>
+              <li><b>Rank 3 · Nv 100</b><span>Pular: 3KK · recompensa: 420k XP</span></li>
+              <li><b>Rank 4 · Nv 110</b><span>Pular: 4,5KK · recompensa: 630k XP</span></li>
+              <li><b>Rank 5 · Nv 120</b><span>Pular: 6KK · recompensa: 840k XP</span></li>
+            </ol>
+            <p class="clan-mission">Cada etapa pede itens do clã (consumidos), a captura de uma espécie específica e derrotas por elemento.</p>
           </div>
         </div>
-        <div class="clan-card">
-          <h3>Subindo de rank (missões)</h3>
-          <ol class="rank-steps">
-            <li><b>Rank 2 · Nv 90</b><span>Pular: 1,5KK · recompensa: 210k XP</span></li>
-            <li><b>Rank 3 · Nv 100</b><span>Pular: 3KK · recompensa: 420k XP</span></li>
-            <li><b>Rank 4 · Nv 110</b><span>Pular: 4,5KK · recompensa: 630k XP</span></li>
-            <li><b>Rank 5 · Nv 120</b><span>Pular: 6KK · recompensa: 840k XP</span></li>
-          </ol>
-          <p class="clan-mission">Cada etapa pede itens do clã (consumidos), a captura de uma espécie específica e derrotas por elemento.</p>
-        </div>
-      </div>
+      </details>
 
-      <hr class="divider">
       <div id="clan-app" aria-live="polite"><div class="clan-loading">Carregando os clãs…</div></div>
-      <div id="clan-simulator" hidden>
-        <input id="clan-species-search"><span id="clan-species-feedback"></span><div id="clan-species-results"></div>
-        <input id="clan-level" value="100"><input id="clan-quality" value="1"><input id="clan-covers" type="checkbox" checked>
-        <span id="clan-covers-lbl"></span><div id="clan-rank"><button data-r="5" aria-pressed="true"></button></div><div id="clan-out"></div>
-      </div>
     </section>
 
     <section class="panel card breeding-lab" id="tab-breeding" aria-label="Guia de Breeding"></section>
