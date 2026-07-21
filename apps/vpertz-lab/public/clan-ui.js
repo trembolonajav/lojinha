@@ -265,11 +265,6 @@ function methodologyDetails() {
         <h4>Limitações</h4>
         <p>${esc(methodology.limitations)}</p>
       </section>
-      <section>
-        <h4>Fontes utilizadas</h4>
-        <ul class="clan-sources">${methodology.sources.map((source) =>
-          `<li><a href="${esc(source.url)}" target="_blank" rel="noreferrer">${esc(source.label)}</a> — ${esc(source.note)}</li>`).join("")}</ul>
-      </section>
     </div>
   </details>`;
 }
@@ -278,7 +273,7 @@ function selectorCard(clan) {
   const isSelected = selectedId === clan.id;
   return `<button class="clan-emblem-card${isSelected ? " is-selected" : ""}" data-clan="${clan.id}" style="--clan:${clan.color}" type="button" aria-pressed="${isSelected}">
     <span class="clan-frame">
-      <span class="clan-emblem"><img src="assets/clans/${clan.id}-symbol.png" alt="" width="96" height="96"></span>
+      <span class="clan-emblem"><img src="assets/clans/${clan.id}-symbol.png" alt="" width="96" height="96" loading="lazy" decoding="async"></span>
       <strong>${esc(clan.name)}</strong>
     </span>
     <span class="clan-card-types">${clan.types.map(typeBadge).join("")}</span>
@@ -291,10 +286,10 @@ function detail(clan) {
 
   return `<section class="clan-detail-simple" style="--clan:${clan.color}">
     <header>
-      <img src="assets/clans/${clan.id}.png" alt="" width="110" height="110">
+      <img src="assets/clans/${clan.id}.png" alt="" width="110" height="110" loading="lazy" decoding="async">
       <div>
         <span class="kicker">Clã selecionado</span>
-        <h2>${esc(clan.name)}</h2>
+        <h3>${esc(clan.name)}</h3>
         <div class="clan-pokemon-types">${clan.types.map(typeBadge).join("")}</div>
         <p>${esc(clan.effect)}</p>
         <p class="clan-counts">
@@ -334,7 +329,7 @@ function render() {
   root.innerHTML = `<section class="clan-picker">
     <div class="clan-picker-head">
       <span class="kicker">Os dez clãs</span>
-      <h2>Selecione um emblema</h2>
+      <h3>Selecione um emblema</h3>
       <p>Escolha um clã para ver o time recomendado, os substitutos e a metodologia por trás do ranking.</p>
     </div>
     <div class="clan-emblems-grid">${clans.map(selectorCard).join("")}</div>

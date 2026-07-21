@@ -9,7 +9,6 @@
 
 const CFG = await vpFetchConfig();
 const esc = vpEsc;
-const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/IoAKGxlJLwK9WRM7W7TUcG";
 
 const isExternal = (url) => /^https?:\/\//i.test(url);
 const contactHref = (c) => (c.url && c.url.trim()) ? c.url : vpWaLink(CFG, CFG.msgNegociar);
@@ -17,7 +16,7 @@ const targetAttr = (url) => isExternal(url) ? ' target="_blank" rel="noreferrer"
 
 /* ---------------------------------------------- botão "Negociar" do topo */
 document.querySelectorAll("[data-wa]").forEach((a) => {
-  a.href = WHATSAPP_GROUP_URL;
+  a.href = vpWaLink(CFG, a.dataset.waMessage || CFG.msgNegociar);
   a.target = "_blank";
   a.rel = "noreferrer";
 });
@@ -106,7 +105,7 @@ document.querySelectorAll("[data-contact-grid]").forEach((grid) => {
   grid.innerHTML = CFG.contatos.map((c) => `
     <a class="contact-card" href="${esc(contactHref(c))}"${targetAttr(contactHref(c))}>
       <div class="icon">${vpIcon(c.icone)}</div>
-      <div><strong>${esc(c.nome)}</strong><span>${esc(c.info || "")}</span></div>
+      <div><strong>${esc(c.nome)}</strong><span>${esc(c.icone === "whatsapp" && !(c.url || "").trim() ? "Atendimento oficial da loja" : (c.info || ""))}</span></div>
       <span class="go" aria-hidden="true">→</span>
     </a>`).join("");
 });

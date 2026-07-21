@@ -18,13 +18,15 @@
       file: "rota-gratis.webp",
       alt: "Projeção de Quality do filhote sem usar Strange Pheromone",
       title: "Caminho gratuito",
-      copy: "O ganho por ovo é menor. A linhagem avança aos poucos, repetindo breeds e incubações."
+      copy: "O ganho por ovo é menor. A linhagem avança aos poucos, repetindo breeds e incubações.",
+      probabilities: [["+0,005", "50%"], ["+0,010", "35%"], ["+0,020", "12%"], ["+0,040", "3%"]]
     },
     pheromone: {
       file: "rota-feromonio.webp",
       alt: "Projeção de Quality do filhote usando Strange Pheromone",
       title: "Caminho com feromônio",
-      copy: "O Strange Pheromone amplia as faixas de ganho e reduz o número de gerações para buscar uma Quality alta."
+      copy: "O Strange Pheromone amplia as faixas de ganho e reduz o número de gerações para buscar uma Quality alta.",
+      probabilities: [["+0,15", "50%"], ["+0,20", "30%"], ["+0,25", "15%"], ["+0,30", "5%"]]
     }
   };
 
@@ -59,6 +61,7 @@
         </div>
       </div>
       <aside class="breeding-summary">
+        <img class="breeding-official-egg" src="assets/breeding/official/egg.png" alt="Ovo oficial usado pelo sistema de Breeding" width="896" height="896">
         <div><b>Nível 60</b><span>Desbloqueio</span></div>
         <div><b>Mesma espécie</b><span>Par obrigatório</span></div>
         <div><b>Até 0,15</b><span>Diferença de Quality</span></div>
@@ -116,6 +119,9 @@
           <div class="route-copy" aria-live="polite">
             <b data-route-title>${ROUTES.free.title}</b>
             <p data-route-copy>${ROUTES.free.copy}</p>
+            <div class="quality-probabilities" data-route-probs>
+              ${ROUTES.free.probabilities.map(([gain, chance]) => `<span><b>${gain}</b><small>${chance}</small></span>`).join("")}
+            </div>
           </div>
         </article>
         <div class="breeding-compare">
@@ -163,6 +169,10 @@
         <article><b>Strange Pheromone</b><span>Opcional; aumenta o salto de Quality.</span></article>
         <article><b>Chance de Shiny</b><span>Todo ovo possui uma chance rara de nascer Shiny.</span></article>
       </div>
+      <div class="breeding-system-facts">
+        <img src="assets/breeding/official/dna.webp" alt="DNA oficial do sistema de Breeding" width="32" height="32">
+        <p><b>Estrutura confirmada na API:</b> 2 slots iniciais, limite de 6, próximo slot por 30 diamonds e eclosão instantânea por 2 diamonds. Custos de gold, Stones e feromônios variam conforme o par; confira sempre a análise antes de confirmar.</p>
+      </div>
     </section>
 
     <section class="breeding-block" id="breeding-faq" aria-labelledby="breeding-faq-title">
@@ -209,6 +219,7 @@
     routeImage.alt = route.alt;
     root.querySelector("[data-route-title]").textContent = route.title;
     root.querySelector("[data-route-copy]").textContent = route.copy;
+    root.querySelector("[data-route-probs]").innerHTML = route.probabilities.map(([gain, chance]) => `<span><b>${gain}</b><small>${chance}</small></span>`).join("");
   }));
 
   /* ---------------------------------------------- lightbox */

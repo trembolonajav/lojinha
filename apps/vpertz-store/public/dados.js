@@ -55,6 +55,6 @@ window.VP_DEFAULT_CONFIG = {
     { icone: "instagram", nome: "Instagram", info: "@vperts_ot", url: "https://www.instagram.com/vperts_ot/" },
     { icone: "youtube",  nome: "YouTube",  info: "@vperts1", url: "https://www.youtube.com/@vperts1" },
     { icone: "twitch",   nome: "Twitch",   info: "@vpertsz — live diária", url: "https://www.twitch.tv/vpertsz" },
-    { icone: "whatsapp", nome: "WhatsApp", info: "Atendimento e grupo de sorteios", url: "" }
+    { icone: "whatsapp", nome: "WhatsApp", info: "Atendimento oficial da loja", url: "" }
   ]
 };

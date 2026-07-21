@@ -182,7 +182,7 @@ window.VPLAB_CLAN_CONTENT = {
 
 /* ---------------------------------------------- estado */
 let cur = null;
-let activeTab = "perfil";
+let activeTab = "pokedex";
 let rotaRegion = "kanto", rotaManual = false, routePokemonSelected = false;
 let pokedexSelected = null;
 
@@ -190,6 +190,9 @@ function syncUrl(){
   const u = new URL(location.href);
   u.searchParams.set("p", cur.slug);
   u.searchParams.set("tab", activeTab);
+  /* "clan" é exclusivo da aba de Clãs — quem escreve é o clan-ui.js.
+     Sair da aba limpa o parâmetro para ele não vazar nas URLs das outras. */
+  if (activeTab !== "clas") u.searchParams.delete("clan");
   history.replaceState(null, "", u);
 }
 
@@ -215,93 +218,6 @@ function syncUrl(){
   }).join("");
 })();
 
-/* ---------------------------------------------- render: perfil */
-function renderPerfil(){
-  const p = cur;
-  const lvl = num($("#level").value) || 100;
-  const q = num($("#quality").value) || 1;
-
-  $("#p_head").innerHTML = `
-    <span class="kicker">#${pad3(p.dexNo)} · Kanto</span>
-    <h2 class="sec" style="font-size:26px">${esc(p.nome)}</h2>
-    <div class="chips" style="margin-top:10px">
-      ${tbs(p.tipos)} ${rarTag(p.raridade)}
-      ${p.boss
-        ? `<span class="chip-info" style="color:var(--bad)"><b>Boss</b> — não aparece na hunt</span>`
-        : `<span class="chip-info">Hunt <b>Nv ${p.huntLevel}</b></span>`}
-    </div>`;
-
-  const total = p.baseStats.reduce((a,b) => a+b, 0);
-  $("#p_stats").innerHTML = p.baseStats.map((v, i) => `
-    <div class="strow">
-      <span class="nm">${STAT_NAMES[i]}</span>
-      <div class="sttrack"><div class="stfill" style="width:${clamp(v/255*100, 2, 100)}%"></div></div>
-      <span class="num mono">${v}</span>
-    </div>`).join("") + `
-    <div class="strow"><span class="nm">Total</span><div></div><span class="num mono" style="color:var(--gold)">${total}</span></div>`;
-
-  $("#p_badges").innerHTML = `
-    <div class="badge gold"><div class="k">Power máx (Nv ${lvl}, Q ${q})</div><div class="v mono">${fmt(powerOf(p, lvl, q))}</div></div>
-    <div class="badge"><div class="k">XP por abate</div><div class="v mono">${fmt(p.xp)}</div></div>
-    <div class="badge"><div class="k">Loot médio / abate</div><div class="v mono">$${fmt(p.lootAvg)}</div></div>
-    <div class="badge"><div class="k">Preço NPC</div><div class="v mono">$${fmt(p.priceNpc)}</div></div>
-    <div class="badge"><div class="k">Venda (Heather)</div><div class="v mono">$${fmt(p.sellValue)}</div></div>`;
-
-  const atk = attacker(p);
-  const best = atk.rec === "fisico" ? atk.bp : atk.bs;
-  $("#p_moves").innerHTML = p.golpes.map((g) => {
-    const rec = best && g.nome === best.nome && g.categoria === best.categoria;
-    const statIdx = g.categoria === "fisico" ? 1 : 3;
-    const idx = g.poder * p.baseStats[statIdx];
-    return `<div class="movecard${rec ? " rec" : ""}">
-      ${rec ? '<span class="star">★ mais dano</span>' : ""}
-      <div class="cat">${g.categoria === "fisico" ? "Físico · usa Ataque" : "Especial · usa Atq. Esp."}</div>
-      <div class="nm">${esc(g.nome)}</div>
-      <div class="meta">${tb(g.tipo)} · Poder ${g.poder} · Nv ${g.nivel} · índice <b class="mono">${fmt(idx)}</b></div>
-    </div>`;
-  }).join("");
-
-  const rows = ALL_TYPES.map((t) => ({ t, m: huntAmp(effVs(t, p.tipos)) }));
-  const grp = (lab, arr) => !arr.length ? "" : `
-    <div class="efgroup"><div class="lab">${lab}</div><div class="eflist">
-      ${arr.map((r) => `<span class="efpill">${tb(r.t)}<span class="x" style="background:${multColor(r.m)}">${fmtX(r.m)}</span></span>`).join("")}
-    </div></div>`;
-  $("#p_eff").innerHTML =
-    grp("Fraco contra (dano amplificado)", rows.filter((r) => r.m > 1).sort((a,b) => b.m - a.m)) +
-    grp("Resiste a", rows.filter((r) => r.m > 0 && r.m < 1).sort((a,b) => a.m - b.m)) +
-    grp("Imune a", rows.filter((r) => r.m === 0));
-
-  /* linha evolutiva: acha a raiz e percorre */
-  let root = p;
-  for (;;) {
-    const prev = DEX.find((x) => x.evolvesToId === root.dexNo);
-    if (!prev) break;
-    root = prev;
-  }
-  const chain = [];
-  let node = root;
-  while (node) {
-    chain.push(node);
-    node = node.evolvesToId ? DEX.find((x) => x.dexNo === node.evolvesToId) : null;
-  }
-  $("#p_evo").innerHTML = chain.length < 2
-    ? '<span class="note" style="margin:0">Esta espécie não evolui.</span>'
-    : chain.map((n, i) => {
-        const arrow = i < chain.length - 1
-          ? `<span class="evo-arrow">— Nv ${n.evolveLevel || "?"} →</span>` : "";
-        return `<button class="evo-node${n.slug === p.slug ? " me" : ""}" data-slug="${n.slug}">${esc(n.nome)}</button>${arrow}`;
-      }).join("");
-  $$("#p_evo .evo-node").forEach((b) => b.addEventListener("click", () => setSpecies(b.dataset.slug)));
-
-  $("#p_drops").innerHTML = p.loot.map((l) => {
-    const pct = l.c / 1000;
-    const pctTxt = pct === 0 ? "0%" : pct < 1 ? pct.toFixed(2).replace(".", ",") + "%" : Math.round(pct) + "%";
-    const qty = l.mn === l.mx ? `×${l.mn}` : `×${l.mn}–${l.mx}`;
-    return `<span class="drop"><b>${esc(l.n)}</b> ${qty} · <span class="pct">${pctTxt}</span></span>`;
-  }).join("");
-}
-
-/* ---------------------------------------------- render: avaliar IV */
 function renderAvaliar(){
   const p = cur;
   const hasSpecies = Boolean($("#x-species").value);
@@ -650,7 +566,8 @@ function renderRota(){
     if (!DEX.some((p) => p.slug === b.dataset.slug)) return;
     rotaManual = false;
     setSpecies(b.dataset.slug);
-    selectTab("perfil");
+    pokedexSelected = ALL_DEX.find((pokemon) => pokemon.slug === b.dataset.slug) || null;
+    selectTab("pokedex");
   }));
 }
 
@@ -664,7 +581,7 @@ function renderPokedex(){
     box.innerHTML = `<div class="pokedex-count">${filtered.length} espécie${filtered.length === 1 ? "" : "s"}</div>
       <div class="pokedex-grid">${filtered.map((pokemon) => `<button class="pokedex-card" type="button" data-slug="${pokemon.slug}">
         <span class="pokedex-number">#${pad3(pokemon.dexNo)}</span>
-        <img loading="lazy" src="${spriteUrl(pokemon.dexNo)}" alt="${esc(pokemon.nome)}">
+        <img loading="lazy" decoding="async" width="76" height="76" src="${spriteUrl(pokemon.dexNo)}" alt="${esc(pokemon.nome)}">
         <b>${esc(pokemon.nome)}</b><span class="pokedex-types">${pokemon.tipos.map(tb).join("")}</span><small>${esc(pokemon.raridade)}</small>
       </button>`).join("")}</div>`;
     $$("#pokedex-content .pokedex-card").forEach((card) => card.addEventListener("click", () => {
@@ -685,7 +602,7 @@ function renderPokedex(){
     <div class="lab">${label}</div><div class="eflist">${rows.map((row) => `<span class="efpill">${tb(row.type)}<span class="x" style="background:${multColor(row.multiplier)}">${fmtX(row.multiplier)}</span></span>`).join("")}</div>
   </div>`;
   const matchupCard = ({ opponent, type, multiplier }) => `<button class="matchup-card" type="button" data-matchup="${opponent.slug}">
-    <img loading="lazy" src="${spriteUrl(opponent.dexNo)}" alt="">
+    <img loading="lazy" decoding="async" width="46" height="46" src="${spriteUrl(opponent.dexNo)}" alt="">
     <span class="matchup-copy"><b>${esc(opponent.nome)}</b><small>#${pad3(opponent.dexNo)} · STAB ${TYPE_LABEL[type]}</small></span>
     <span class="matchup-values"><strong>${fmtX(multiplier)}</strong><small>hunt ${fmtX(huntAmp(multiplier))}</small></span>
   </button>`;
@@ -709,7 +626,7 @@ function renderPokedex(){
   for (let node = root; node; node = node.evolvesToId ? ALL_DEX.find((item) => item.dexNo === node.evolvesToId) : null) chain.push(node);
   box.innerHTML = `<button class="pokedex-back" id="pokedex-back" type="button">← Voltar ao catálogo</button>
     <div class="pokedex-detail-head">
-      <div class="pokedex-art"><img src="${spriteUrl(pokemon.dexNo)}" alt="${esc(pokemon.nome)}"></div>
+      <div class="pokedex-art"><img src="${spriteUrl(pokemon.dexNo)}" alt="${esc(pokemon.nome)}" width="132" height="132" decoding="async"></div>
       <div><span class="kicker">#${pad3(pokemon.dexNo)}</span><h2>${esc(pokemon.nome)}</h2><div class="chips">${tbs(pokemon.tipos)} ${rarTag(pokemon.raridade)}</div>
       <div class="pokedex-actions"><button type="button" data-pokedex-action="avaliar">Avaliar IV</button><button type="button" data-pokedex-action="rota">Planejar rota</button></div></div>
     </div>
@@ -734,7 +651,7 @@ function renderPokedex(){
       <div class="matchup-legend"><span><b>×2</b> padrão → <b>×2,5</b> na hunt</span><span><b>×4</b> fraqueza dupla → <b>×5,5</b> na hunt</span></div>
     </div>
     <div class="pokedex-section"><div class="workspace-label">Golpes (${pokemon.golpes.length})</div><div class="pokedex-moves">${pokemon.golpes.length ? pokemon.golpes.map((move) => `<span><b>${esc(move.nome)}</b>${tb(move.tipo)}<small>${move.categoria === "fisico" ? "Físico" : "Especial"} · Poder ${move.poder} · Nv ${move.nivel}</small></span>`).join("") : '<p class="note">Nenhum golpe próprio cadastrado.</p>'}</div></div>
-    <div class="pokedex-section"><div class="workspace-label">Linha evolutiva</div><div class="pokedex-evolution">${chain.map((item, index) => `<button type="button" data-evo="${item.slug}" class="${item.slug === pokemon.slug ? "is-current" : ""}"><img src="${spriteUrl(item.dexNo)}" alt=""><span>${esc(item.nome)}</span></button>${index < chain.length-1 ? `<i>→ Nv ${item.evolveLevel || "?"} →</i>` : ""}`).join("") || "Sem evolução"}</div></div>
+    <div class="pokedex-section"><div class="workspace-label">Linha evolutiva</div><div class="pokedex-evolution">${chain.map((item, index) => `<button type="button" data-evo="${item.slug}" class="${item.slug === pokemon.slug ? "is-current" : ""}"><img src="${spriteUrl(item.dexNo)}" alt="" width="34" height="34" loading="lazy" decoding="async"><span>${esc(item.nome)}</span></button>${index < chain.length-1 ? `<i>→ Nv ${item.evolveLevel || "?"} →</i>` : ""}`).join("") || "Sem evolução"}</div></div>
     <div class="pokedex-section"><div class="workspace-label">Drops (${pokemon.loot.length})</div><div class="pokedex-drops">${pokemon.loot.map((drop) => { const chance=drop.c/1000; const chanceText=chance===0?"0%":chance<1?chance.toFixed(2).replace(".",",")+"%":Math.round(chance)+"%"; return `<span><b>${esc(drop.n)}</b><small>×${drop.mn}${drop.mn!==drop.mx?`–${drop.mx}`:""} · ${chanceText} · $${fmt(drop.v)}</small></span>`; }).join("")}</div></div>`;
   $("#pokedex-back").addEventListener("click", () => {
     pokedexSelected = null;
@@ -856,15 +773,13 @@ $("#x-result").addEventListener("click", (e) => {
 
 /* ---------------------------------------------- navegação */
 function renderActive(){
-  if (activeTab === "perfil") renderPerfil();
-  else if (activeTab === "pokedex") renderPokedex();
+  if (activeTab === "pokedex") renderPokedex();
   else if (activeTab === "avaliar") renderAvaliar();
   else if (activeTab === "rota") renderRota();
 }
 
 function setSpecies(slug){
   cur = ALL_DEX.find((p) => p.slug === slug) || DEX[0];
-  $("#species-search").value = cur.nome;
   $("#iv-species-search").value = cur.nome;
   $$(".search-input-wrap").forEach((wrap) => { wrap.querySelector(".search-clear").hidden = !wrap.querySelector("input").value; });
   $("#x-species-sprite").src = spriteUrl(cur.dexNo);
@@ -873,7 +788,6 @@ function setSpecies(slug){
   $("#x-species").value = cur.slug;
   syncUrl();
   renderActive();
-  if (activeTab !== "perfil") renderPerfil(); /* mantém o perfil pronto ao voltar */
 }
 
 function selectTab(name){
@@ -885,7 +799,7 @@ function selectTab(name){
 }
 
 $$(".main-tab").forEach((b) => b.addEventListener("click", () => selectTab(b.dataset.tab)));
-$("#home-link").addEventListener("click", (e) => { e.preventDefault(); selectTab("perfil"); });
+$("#home-link").addEventListener("click", (e) => { e.preventDefault(); selectTab("pokedex"); });
 function speciesFromSearch(value, pool = DEX){
   const term = cleanOcr(value).replace(/^#/, "").trim();
   if (!term) return null;
@@ -982,7 +896,6 @@ function bindSpeciesSearch(inputId, feedbackId, resultsId, pool = DEX, onChoose 
     } else if (e.key === "Escape") close();
   });
 }
-bindSpeciesSearch("species-search", "species-feedback", "species-results");
 bindSpeciesSearch("iv-species-search", "iv-species-feedback", "iv-species-results", ALL_DEX);
 bindSpeciesSearch("route-species-search", "route-species-feedback", "route-species-results", ALL_DEX);
 bindSpeciesSearch("pokedex-species-search", "pokedex-species-feedback", "pokedex-species-results", ALL_DEX, (pokemon) => {
@@ -990,7 +903,6 @@ bindSpeciesSearch("pokedex-species-search", "pokedex-species-feedback", "pokedex
   renderPokedex();
 });
 $("#x-species").addEventListener("change", () => setSpecies($("#x-species").value));
-["level", "quality"].forEach((id) => $("#" + id).addEventListener("input", renderActive));
 ["x-level", "x-qual", "x-power", "x-ivtotal"].forEach((id) => $("#" + id).addEventListener("input", renderAvaliar));
 STAT_NAMES.forEach((_, i) => $("#o" + i).addEventListener("input", renderAvaliar));
 $("#iv-image").addEventListener("change", (e) => scanIvImage(e.target.files[0]));
@@ -1140,16 +1052,14 @@ $("#pokedex-species-search").parentElement.querySelector(".search-clear").addEve
   const tab = u.searchParams.get("tab");
   const slug = u.searchParams.get("p");
   cur = DEX.find((p) => p.slug === slug) || DEX.find((p) => p.slug === "scizor") || DEX[0];
-  $("#species-search").value = "";
   $("#iv-species-search").value = "";
   $("#route-species-search").value = "";
   $("#x-species-sprite").src = SPRITE_PLACEHOLDER;
   $("#x-species-sprite").alt = "";
   $("#x-species-sprite").classList.add("is-placeholder");
   $("#x-species").value = "";
-  if (tab && ["perfil","pokedex","avaliar","rota","fipe","clas","breeding","profissoes"].includes(tab)) activeTab = tab;
+  if (tab && ["pokedex","avaliar","rota","fipe","clas","breeding","profissoes"].includes(tab)) activeTab = tab;
   $$(".main-tab").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === activeTab ? "true" : "false"));
   $$(".panel").forEach((s) => s.classList.toggle("active", s.id === "tab-" + activeTab));
-  renderPerfil();
   renderActive();
 })();

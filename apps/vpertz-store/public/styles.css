@@ -453,6 +453,14 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:700}
 .contact-intro{text-align:center;max-width:660px;margin:0 auto 36px}
 .contact-intro img{width:150px;mix-blend-mode:screen}
 .contact-intro p{color:var(--muted);font-size:14.5px}
+.contact-section{max-width:1120px;margin:54px auto 0}
+.contact-section-featured{margin-top:18px}
+.contact-section-head{text-align:center;max-width:720px;margin:0 auto 24px}
+.contact-section-head h2{font-size:clamp(24px,3vw,34px);margin-bottom:8px}
+.contact-section-head p{color:var(--muted);font-size:13.5px}
+.community-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+}
 .contact-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;
   max-width:1020px;margin:0 auto;
@@ -479,6 +487,40 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:700}
 .contact-card span{font-size:12px;color:var(--muted)}
 .contact-card .go{margin-left:auto;color:var(--faint);font-size:18px;transition:color .2s,transform .2s}
 .contact-card:hover .go{color:var(--gold);transform:translateX(3px)}
+.community-card.whatsapp-card .icon{color:#38d878;background:rgba(31,190,93,.1);border-color:rgba(56,216,120,.34)}
+.community-card.discord-card .icon{color:#9da7ff;background:rgba(88,101,242,.13);border-color:rgba(125,138,255,.38)}
+.community-card:last-child:nth-child(3n + 2){grid-column:2}
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ------------------------------------------------ intermédio */
+.intermediary-page{padding-top:52px}
+.intermediary-hero{
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:54px;align-items:center;
+  padding:58px;border:1px solid var(--line);border-radius:24px;
+  background:radial-gradient(circle at 82% 28%,rgba(194,54,41,.18),transparent 34%),linear-gradient(145deg,rgba(29,17,15,.97),rgba(10,6,6,.96));
+  box-shadow:var(--shadow-soft);overflow:hidden;
+}
+.intermediary-copy h1{font-size:clamp(34px,4.3vw,58px);line-height:1.08;max-width:850px}
+.intermediary-copy>p{color:var(--muted);font-size:15px;line-height:1.75;max-width:720px;margin-top:18px}
+.intermediary-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:30px}
+.intermediary-cta{padding:15px 22px}
+.intermediary-secondary{font-size:13px;font-weight:700;color:var(--gold);border-bottom:1px solid rgba(229,179,79,.45);padding:8px 0}
+.intermediary-seal{text-align:center;display:grid;justify-items:center}
+.intermediary-seal img{width:min(100%,260px);mix-blend-mode:screen;filter:drop-shadow(0 20px 38px rgba(0,0,0,.55))}
+.intermediary-seal span{color:var(--red-2);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}
+.intermediary-seal strong{font-family:Cinzel,serif;color:var(--gold);font-size:25px;margin-top:5px}
+.intermediary-section{margin-top:72px}
+.intermediary-section .section-head{text-align:center;max-width:680px;margin:0 auto 28px}
+.intermediary-section .section-head p{color:var(--muted);font-size:13.5px;margin-top:7px}
+.intermediary-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.intermediary-steps article{padding:27px;border-radius:var(--radius);border:1px solid var(--line);background:linear-gradient(155deg,rgba(29,17,15,.9),rgba(12,7,7,.92))}
+.step-number{font-family:Cinzel,serif;color:var(--red-2);font-size:13px;font-weight:800;letter-spacing:.12em}
+.intermediary-steps h3{font-family:Cinzel,serif;font-size:18px;color:#fff;margin:12px 0 8px}
+.intermediary-steps p,.intermediary-trust p{color:var(--muted);font-size:13px;line-height:1.65}
+.intermediary-trust{display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;margin:64px 0 10px;padding:38px;border-radius:20px;border:1px solid var(--line);background:rgba(18,10,9,.78)}
+.intermediary-trust h2{margin:5px 0 10px}
+.intermediary-trust aside{padding:22px;border-radius:14px;border:1px solid rgba(229,179,79,.36);background:rgba(229,179,79,.06)}
+.intermediary-trust aside strong{display:block;color:var(--gold);margin-bottom:7px}
 
 /* ------------------------------------------------ footer */
 footer{
@@ -535,6 +577,9 @@ footer{
   .trust{grid-template-columns:1fr;gap:12px}
   .footer-grid{grid-template-columns:1fr 1fr;gap:36px}
   .footer-about{grid-column:1/-1}
+  .community-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .community-card:last-child:nth-child(3n + 2){grid-column:auto}
+  .intermediary-hero{padding:38px;gap:28px}
 }
 @media(max-width:700px){
   .container{width:min(100% - 28px,1200px)}
@@ -562,6 +607,13 @@ footer{
   .trade-side img.diamond{width:160px}
   .footer-grid{grid-template-columns:1fr;gap:30px}
   .footer-bottom{flex-direction:column}
+  .community-grid,.intermediary-steps,.intermediary-trust{grid-template-columns:1fr}
+  .intermediary-hero{grid-template-columns:1fr;padding:30px 22px;text-align:center}
+  .intermediary-copy>p{margin-inline:auto}
+  .intermediary-actions{justify-content:center}
+  .intermediary-seal{order:-1}
+  .intermediary-seal img{width:180px}
+  .intermediary-trust{padding:26px 20px}
 }
 
 @media(prefers-reduced-motion:reduce){

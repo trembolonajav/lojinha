@@ -15,3 +15,11 @@ UMAMI.txt
 .data-dev.log
 coverage/
 .env.test
+
+# Resíduos locais das ferramentas de captura do jogo.
+chrome-*-profile/
+poke_capture.jsonl
+poke_assets_capture.jsonl
+poke_assets_capture.stop
+poke_capture.pid
+*.pid

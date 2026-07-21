@@ -55,6 +55,10 @@
   padding:18px;border:1px solid var(--line-strong);border-radius:17px;
   background:rgba(14,10,8,.78);box-shadow:0 22px 60px rgba(0,0,0,.3);
 }
+.breeding-official-egg{
+  grid-column:1/-1;justify-self:center;width:112px;height:112px;object-fit:contain;
+  filter:drop-shadow(0 12px 22px rgba(215,104,54,.26));
+}
 .breeding-summary div{
   padding:13px 8px;text-align:center;
   border:1px solid var(--breed-inset-line);border-radius:11px;background:var(--breed-inset);
@@ -168,6 +172,10 @@
 .route-copy{padding:16px 18px}
 .route-copy b{color:color-mix(in srgb, var(--gold) 60%, var(--cream));font-size:14px}
 .route-copy p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.quality-probabilities{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px}
+.quality-probabilities span{display:grid;gap:3px;padding:8px 5px;text-align:center;border:1px solid var(--breed-inset-line);border-radius:8px;background:var(--breed-inset)}
+.quality-probabilities b{color:var(--cream);font-size:12px}
+.quality-probabilities small{color:var(--breed-ember);font-size:11px;font-weight:800}
 
 .breeding-compare{display:grid;gap:12px}
 .breeding-compare article{padding:18px}
@@ -177,6 +185,10 @@
 .breeding-compare p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
 .breeding-note{padding:16px;color:color-mix(in srgb, var(--gold) 55%, var(--muted));font-size:13px;line-height:1.55}
 .breeding-note b{color:var(--gold)}
+.breeding-system-facts{display:flex;align-items:center;gap:14px;margin-top:14px;padding:15px 17px;border:1px solid var(--breed-line);border-radius:13px;background:var(--breed-inset)}
+.breeding-system-facts img{width:42px;height:42px;image-rendering:pixelated;flex:0 0 auto}
+.breeding-system-facts p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+.breeding-system-facts b{color:var(--gold)}
 
 /* ---------------------------------------------------------- regras de IV */
 .breeding-rules{display:grid;gap:10px}

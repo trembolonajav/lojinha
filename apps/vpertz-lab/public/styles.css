@@ -122,6 +122,18 @@ body>header .container{width:min(1560px,calc(100% - 44px))}
 }
 .main-tab::after{content:"";position:absolute;left:50%;right:50%;bottom:4px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--red-2),var(--gold));transition:left .25s var(--ease),right .25s var(--ease)}
 .main-tab svg{width:15px;height:15px;fill:currentColor}
+.main-tab .tab-game-icon{
+  width:21px;height:21px;flex:0 0 21px;object-fit:contain;image-rendering:pixelated;
+  filter:grayscale(.72) sepia(.28) saturate(.72) brightness(.82);
+  opacity:.82;transition:filter .2s,opacity .2s,transform .2s;
+}
+.main-tab:hover .tab-game-icon{
+  filter:grayscale(.3) sepia(.2) saturate(.9) brightness(.98);opacity:1;transform:translateY(-1px);
+}
+.main-tab[aria-selected="true"] .tab-game-icon{
+  filter:saturate(.9) brightness(1.02) drop-shadow(0 0 5px color-mix(in srgb,var(--gold) 34%,transparent));
+  opacity:1;
+}
 .main-tab:hover{color:#fff;background:rgba(194,54,41,.1)}
 .main-tab[aria-selected="true"]{
   color:#fff;background:rgba(194,54,41,.1);
@@ -142,27 +154,25 @@ body>header .container{width:min(1560px,calc(100% - 44px))}
 .btn-twitch{color:#cbb3ff;background:rgba(145,70,255,.1);border-color:rgba(145,70,255,.38)}
 .btn-twitch:hover{background:rgba(145,70,255,.2)}
 .btn-store{
-  color:#07130b;background:linear-gradient(180deg,#3ae07c,#1fb959);
-  border-color:rgba(37,211,102,.5);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 22px rgba(37,211,102,.16);
+  position:relative;isolation:isolate;justify-content:center;
+  min-width:190px;height:48px;padding:0 20px 0 60px;
+  color:#f1fff5;background:url("assets/diamond-button.webp") center/100% 100% no-repeat;
+  border:0;border-radius:14px;
+  text-shadow:0 1px 2px #001d0c,0 0 8px rgba(0,0,0,.8);
+  box-shadow:0 9px 22px rgba(0,125,55,.2);
 }
-.btn-store:hover{filter:brightness(1.1)}
+.btn-store::after{
+  content:"";position:absolute;z-index:-1;inset:5px 7px;border-radius:11px;
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,20,8,.18));pointer-events:none;
+}
+.btn-store:hover{filter:brightness(1.08) saturate(1.04);box-shadow:0 11px 27px rgba(0,210,90,.24)}
+.btn-store:focus-visible{outline:2px solid #62ffa5;outline-offset:3px}
 
 /* ------------------------------------------------ page + tool controls */
 .page{padding:26px 0 90px}
-.tool-controls{
-  display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:10px;
-  padding:14px;margin-bottom:22px;
-  border:1px solid var(--line-strong);border-radius:14px;
-  background:rgba(8,5,4,.62);
-}
-.control-title{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.control-title strong{font-family:Cinzel,serif;color:var(--cream);font-size:15px}
-.control-title span{color:var(--muted);font-size:12px}
 .search-feedback{grid-column:1/-1;min-height:0;color:var(--muted);font-size:11px}
 .search-feedback:not(:empty){margin-top:-3px}
 .search-feedback.is-error{color:var(--bad)}
-.clan-controls{margin:0 0 16px}
 .field{display:flex;flex-direction:column;gap:5px}
 .search-field{position:relative}
 .search-input-wrap{position:relative}
@@ -226,55 +236,13 @@ h2.sec{font-size:20px;margin-bottom:4px}
   text-shadow:0 1px 2px rgba(0,0,0,.4);
 }
 .chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
-.chip-info{
-  font-size:12px;font-weight:600;color:var(--muted);
-  background:rgba(255,255,255,.04);border:1px solid var(--line);
-  border-radius:99px;padding:4px 11px;
-}
-.chip-info b{color:var(--cream)}
 .rar{
   font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
   padding:3px 9px;border-radius:99px;border:1px solid;
 }
 
-/* stats com barra */
-.stats{display:grid;gap:8px;margin-top:8px}
-.strow{display:grid;grid-template-columns:82px 1fr 46px;align-items:center;gap:10px}
-.strow .nm{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+/* barra usada pelas notas de IV do Avaliar */
 .sttrack{height:13px;background:#0d0807;border:1px solid var(--line);border-radius:7px;overflow:hidden}
-.stfill{height:100%;border-radius:6px 0 0 6px;background:linear-gradient(90deg,var(--red-deep),var(--red-2))}
-.strow .num{text-align:right;font-size:13px;font-weight:800}
-
-/* badges de números */
-.badges{display:flex;flex-wrap:wrap;gap:10px}
-.badge{
-  flex:1 1 130px;min-width:120px;
-  background:rgba(255,255,255,.03);border:1px solid var(--line);
-  border-radius:12px;padding:11px 14px;
-}
-.badge .k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.badge .v{font-size:20px;font-weight:800;margin-top:3px}
-.badge .v small{font-size:11px;color:var(--faint);font-weight:600}
-.badge.gold .v{color:var(--gold)}
-
-/* golpes */
-.moves{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:640px){.moves{grid-template-columns:1fr}}
-.movecard{
-  position:relative;border:1px solid var(--line);border-radius:12px;
-  padding:12px 14px;background:rgba(255,255,255,.03);
-}
-.movecard.rec{
-  border-color:rgba(229,179,79,.55);
-  background:linear-gradient(180deg,rgba(229,179,79,.1),rgba(255,255,255,.02));
-}
-.movecard .cat{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700}
-.movecard .nm{font-size:15px;font-weight:800;margin:3px 0}
-.movecard .meta{font-size:12px;color:var(--muted)}
-.movecard .star{
-  position:absolute;top:10px;right:12px;
-  font-size:9.5px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;
-}
 
 /* efetividade */
 .efgroup{margin-top:14px}
@@ -287,35 +255,9 @@ h2.sec{font-size:20px;margin-bottom:4px}
 }
 .efpill .x{font-size:11px;padding:1px 6px;border-radius:5px;color:#fff;font-weight:800}
 
-.callout{
-  border:1px solid var(--line-strong);border-radius:12px;
-  padding:13px 16px;font-size:13.5px;
-  background:linear-gradient(180deg,rgba(229,179,79,.08),rgba(255,255,255,.02));
-}
-.callout b{color:var(--gold)}
 .note{font-size:12px;color:var(--faint);margin:10px 0 0}
 .note b{color:var(--muted)}
 
-/* evolução */
-.evoline{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:13.5px;font-weight:700}
-.evoline .evo-arrow{color:var(--faint);font-size:12px;font-weight:600}
-.evoline .evo-node{
-  padding:7px 13px;border-radius:10px;cursor:pointer;
-  background:rgba(255,255,255,.04);border:1px solid var(--line);
-  transition:border-color .2s,background .2s;
-}
-.evoline .evo-node:hover{border-color:var(--gold)}
-.evoline .evo-node.me{border-color:var(--red-2);background:rgba(194,54,41,.14)}
-
-/* drops */
-.drops{display:flex;flex-wrap:wrap;gap:8px}
-.drop{
-  font-size:12px;color:var(--muted);
-  background:rgba(255,255,255,.03);border:1px solid var(--line);
-  border-radius:10px;padding:6px 11px;
-}
-.drop b{color:var(--cream)}
-.drop .pct{color:var(--gold);font-weight:700}
 
 /* ------------------------------------------------ Pokédex */
 .pokedex-controls{display:grid;grid-template-columns:minmax(260px,1.7fr) 1fr 1fr;gap:10px;margin:18px 0 8px;padding:14px;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.15)}
@@ -389,10 +331,9 @@ h2.sec{font-size:20px;margin-bottom:4px}
 .scan-preview{grid-column:1/-1;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .scan-preview img{max-width:230px;max-height:160px;border-radius:10px;border:1px solid var(--line-strong);display:block;background:#000}
 .field input.ocr-missing{border-color:rgba(229,179,79,.6);box-shadow:0 0 0 2px rgba(229,179,79,.14)}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .iv-input-grid{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:12px}
 .grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-@media(max-width:760px){.grid6{grid-template-columns:repeat(3,1fr)}.grid3,.iv-input-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.grid6{grid-template-columns:repeat(3,1fr)}.iv-input-grid{grid-template-columns:1fr 1fr}}
 .ivrow{display:grid;grid-template-columns:82px 1fr 84px;align-items:center;gap:10px;margin-top:8px}
 .ivrow .nm{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase}
 .ivrow .num{text-align:right;font-size:13px;font-weight:800}
@@ -640,20 +581,15 @@ body>footer{
   .btn-twitch span{display:none}
 }
 @media(max-width:900px){
-  .tool-controls{grid-template-columns:1fr 1fr}
-  .tool-controls .search-field{grid-column:1/-1}
   .pokedex-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.pokedex-facts{grid-template-columns:repeat(3,1fr)}.matchup-columns{grid-template-columns:1fr}
 }
 @media(max-width:640px){
   .container{width:min(100% - 26px,1160px)}
+  .btn-store{min-width:168px;height:44px;padding-left:54px;font-size:12px}
   .card{padding:18px 15px}
-  .grid3{grid-template-columns:1fr 1fr}
-  .badge{min-width:104px}
   .scan-card{grid-template-columns:1fr}.scan-button{display:block;text-align:center}.scan-status{grid-column:1}
   .clan-facts,.rank-steps{grid-template-columns:1fr}
   .analysis-metrics{grid-template-columns:1fr 1fr}
-  .tool-controls{grid-template-columns:1fr}
-  .tool-controls .search-field{grid-column:auto}
   .iv-workspace{grid-template-columns:1fr}
   .iv-entry-panel,.iv-result-panel{padding:13px}
   .iv-entry-panel .iv-input-grid{grid-template-columns:1fr}
@@ -677,18 +613,18 @@ body>footer{
 }
 
 /* Seletor visual de clãs — mantém o guia original acima */
-#tab-clas{padding:28px;background:linear-gradient(180deg,#17100e,#0b0908)}#clan-app{margin-top:0;min-height:0}.clan-picker{padding:4px 0 8px}.clan-picker-head{margin-bottom:22px}.clan-picker-head h2,.clan-detail-simple h2,.clan-roster-title h3{font-family:"Cinzel",serif;color:var(--cream);margin:5px 0 7px}.clan-picker-head h2{font-size:clamp(25px,3vw,34px)}.clan-picker-head p,.clan-roster-title p{color:var(--muted);margin:0;line-height:1.55}
+#tab-clas{padding:28px;background:linear-gradient(180deg,#17100e,#0b0908)}#clan-app{margin-top:0;min-height:0}.clan-picker{padding:4px 0 8px}.clan-picker-head{margin-bottom:22px}.clan-picker-head h3,.clan-detail-simple h3,.clan-roster-title h3{font-family:"Cinzel",serif;color:var(--cream);margin:5px 0 7px}.clan-picker-head h3{font-size:clamp(25px,3vw,34px)}.clan-picker-head p,.clan-roster-title p{color:var(--muted);margin:0;line-height:1.55}
 .clan-emblems-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}.clan-emblem-card{appearance:none;border:1px solid #3d281f;border-radius:15px;background:linear-gradient(155deg,#160d0a,#0b0807);padding:11px 10px 12px;min-width:0;color:inherit;cursor:pointer;transition:.2s transform,.2s border-color,.2s box-shadow}.clan-emblem-card:hover{transform:translateY(-3px);border-color:var(--clan);box-shadow:0 12px 24px #0008}.clan-emblem-card.is-selected{border-color:var(--clan);box-shadow:0 0 0 2px color-mix(in srgb,var(--clan) 45%,transparent),0 12px 28px #0009}
 .clan-frame{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:.82;border:2px solid #8e4727;border-radius:14px 14px 8px 8px;background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--clan) 12%,#160c08) 0 29%,#090605 30% 34%,transparent 35%),linear-gradient(145deg,#26140d,#0b0706 60%,#1e100b);box-shadow:inset 0 0 0 2px #2e160e,inset 0 0 0 4px #ba6231,inset 0 0 0 6px #3b1a10,0 5px 14px #0009;overflow:hidden}.clan-frame::before,.clan-frame::after{content:"◆";position:absolute;left:50%;transform:translateX(-50%);color:#ef6b32;text-shadow:0 0 8px #ef3e16;font-size:12px;z-index:2}.clan-frame::before{top:3px}.clan-frame::after{bottom:31px}
 .clan-emblem{display:grid;place-items:center;width:68%;height:auto;aspect-ratio:1;margin-top:-8px;border-radius:50%;border:2px solid var(--clan);background:radial-gradient(circle,#24120c,#080504 70%);box-shadow:inset 0 0 0 3px #100806,0 0 17px color-mix(in srgb,var(--clan) 25%,transparent)}.clan-emblem img{width:82%;height:82%;object-fit:contain;filter:drop-shadow(0 4px 4px #000);image-rendering:auto}.clan-frame strong{position:absolute;z-index:3;left:8px;right:8px;bottom:7px;min-height:27px;display:grid;place-items:center;padding:3px 2px;border:1px solid #a45a32;border-radius:8px;background:linear-gradient(#2a1710,#110a08);font:700 clamp(10px,1.15vw,15px)/1 "Cinzel",serif;text-transform:uppercase;color:#f2e4d7;text-shadow:0 2px #000;letter-spacing:.02em}.clan-card-types{display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;min-height:29px;padding-top:9px}.clan-card-types .clan-type{font-size:10px;padding:4px 7px}
-.clan-detail-simple{scroll-margin-top:105px;margin-top:32px;border:1px solid var(--clan);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--clan) 7%,#130b09),#090706 50%);overflow:hidden}.clan-detail-simple>header{display:flex;align-items:center;gap:22px;padding:25px 28px;border-bottom:1px solid #3a251c;background:linear-gradient(100deg,color-mix(in srgb,var(--clan) 15%,#130c09),#0d0908)}.clan-detail-simple>header>img{width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 8px 8px #000)}.clan-detail-simple>header h2{font-size:32px;color:var(--clan)}.clan-detail-simple>header p{max-width:760px;margin:12px 0 0;color:#c8b9af;line-height:1.55}
+.clan-detail-simple{scroll-margin-top:105px;margin-top:32px;border:1px solid var(--clan);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--clan) 7%,#130b09),#090706 50%);overflow:hidden}.clan-detail-simple>header{display:flex;align-items:center;gap:22px;padding:25px 28px;border-bottom:1px solid #3a251c;background:linear-gradient(100deg,color-mix(in srgb,var(--clan) 15%,#130c09),#0d0908)}.clan-detail-simple>header>img{width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 8px 8px #000)}.clan-detail-simple>header h3{font-size:32px;color:var(--clan)}.clan-detail-simple>header p{max-width:760px;margin:12px 0 0;color:#c8b9af;line-height:1.55}
 .clan-ranking-note{margin:20px 24px 0;padding:15px 17px;border:1px solid #4a321f;border-radius:12px;background:#11100f;color:#cbbdb4;line-height:1.55;display:flex;gap:8px;flex-direction:column}.clan-ranking-note b{color:var(--gold)}.clan-ranking-note span{font-size:13px;color:var(--muted)}
 .clan-roster-section{padding:26px 24px;border-top:1px solid #2c1c16;margin-top:24px}.clan-roster-title{margin-bottom:15px}.clan-roster-title>span{text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-size:11px;font-weight:800}.clan-pokemon-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.clan-pokemon-grid.recommended{grid-template-columns:repeat(3,minmax(0,1fr))}.clan-pokemon-card{position:relative;display:flex;flex-direction:column;align-items:center;min-width:0;padding:14px 10px;border:1px solid #39251c;border-radius:12px;background:linear-gradient(150deg,#170e0b,#0b0807);text-align:center}.clan-pokemon-grid.recommended .clan-pokemon-card{border-color:var(--clan)}.clan-pokemon-card>img{width:88px;height:88px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 5px 4px #000)}.clan-pokemon-card h4{margin:3px 0 6px;color:#f0e5dc;font-size:14px}.clan-pokemon-types{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;min-height:20px}.clan-pokemon-types .clan-type{font-size:10px;padding:3px 7px}.clan-pokemon-card p{display:flex;flex-direction:column;gap:3px;margin:9px 0 0;font-size:11px;color:var(--muted);line-height:1.35}.clan-pokemon-card p b{color:#e3c477}.clan-pokemon-card p span{overflow-wrap:anywhere}.clan-place,.clan-dex{position:absolute;top:8px;font-size:10px;font-weight:800}.clan-place{left:9px;color:var(--gold)}.clan-dex{right:9px;color:#756b65}.clan-empty{color:var(--muted);padding:16px;border:1px dashed #3a2a22;border-radius:10px}
-@media(max-width:1050px){.clan-emblems-grid{grid-template-columns:repeat(5,minmax(110px,1fr));gap:9px}.clan-pokemon-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:780px){#tab-clas{padding:18px}.clan-emblems-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.clan-pokemon-grid,.clan-pokemon-grid.recommended{grid-template-columns:repeat(2,minmax(0,1fr))}.clan-detail-simple>header{align-items:flex-start;padding:20px;gap:14px}.clan-detail-simple>header>img{width:76px;height:76px}.clan-detail-simple>header h2{font-size:25px}.clan-bonus-box,.clan-ranking-note{margin-left:14px;margin-right:14px}.clan-roster-section{padding:22px 14px}}@media(max-width:430px){#tab-clas{padding:12px}.clan-emblems-grid{gap:7px}.clan-emblem-card{padding:7px 6px 9px}.clan-pokemon-grid,.clan-pokemon-grid.recommended{grid-template-columns:1fr}.clan-detail-simple>header{flex-direction:column}.clan-frame strong{font-size:10px}}
+@media(max-width:1050px){.clan-emblems-grid{grid-template-columns:repeat(5,minmax(110px,1fr));gap:9px}.clan-pokemon-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:780px){#tab-clas{padding:18px}.clan-emblems-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.clan-pokemon-grid,.clan-pokemon-grid.recommended{grid-template-columns:repeat(2,minmax(0,1fr))}.clan-detail-simple>header{align-items:flex-start;padding:20px;gap:14px}.clan-detail-simple>header>img{width:76px;height:76px}.clan-detail-simple>header h3{font-size:25px}.clan-ranking-note{margin-left:14px;margin-right:14px}.clan-roster-section{padding:22px 14px}}@media(max-width:430px){#tab-clas{padding:12px}.clan-emblems-grid{gap:7px}.clan-emblem-card{padding:7px 6px 9px}.clan-pokemon-grid,.clan-pokemon-grid.recommended{grid-template-columns:1fr}.clan-detail-simple>header{flex-direction:column}.clan-frame strong{font-size:10px}}
 
 /* Moldura PNG fornecida pelo usuário */
 .clan-emblem-card{padding:7px 7px 11px;border-color:#3b2118;background:linear-gradient(160deg,#170d0a,#080605)}
-.clan-frame{aspect-ratio:1;border:0;border-radius:0;background-color:transparent;background-image:url("assets/clans/clan-frame-transparent.png");background-repeat:no-repeat;background-position:center;background-size:100% 100%;box-shadow:none;overflow:visible}
+.clan-frame{aspect-ratio:1;border:0;border-radius:0;background-color:transparent;background-image:url("assets/clans/clan-frame-transparent.webp");background-repeat:no-repeat;background-position:center;background-size:100% 100%;box-shadow:none;overflow:visible}
 .clan-frame::before,.clan-frame::after{display:none}
 .clan-frame .clan-emblem{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:43%;height:auto;aspect-ratio:1;margin:0;border:0;background:transparent;box-shadow:none;overflow:hidden}
 .clan-frame .clan-emblem img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 7px 6px #000c) saturate(1.08)}
@@ -772,7 +708,6 @@ body>footer{
 .clan-weights th{color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
 .clan-weights td:nth-child(2){color:var(--cream);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
 .clan-formula{padding:10px 12px;border:1px solid #33241d;border-radius:8px;background:#0b0908;font-family:ui-monospace,monospace;font-size:11px!important;overflow-x:auto}
-.clan-sources a{color:var(--gold);text-decoration:underline}
 .clan-version{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:24px;padding:14px 24px;border-top:1px solid #2c1c16;font-size:11px;color:var(--faint)}
 .clan-error{color:var(--bad)}
 
