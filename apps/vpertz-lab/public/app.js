@@ -354,11 +354,41 @@ function reconcileCardFields(p, stats, read){
     sources
   };
 }
-function findSpeciesInOcr(text){
+function findSpeciesExactInOcr(text){
   const normalized = cleanOcr(text).replace(/[^a-z0-9♀♂]+/g, " ");
   return ALL_DEX.slice().sort((a,b) => b.nome.length-a.nome.length).find((p) =>
     normalized.includes(cleanOcr(p.nome).replace(/[^a-z0-9♀♂]+/g, " "))
   );
+}
+function findSpeciesInOcr(text){
+  const exact = findSpeciesExactInOcr(text);
+  if (exact) return exact;
+  const normalized = cleanOcr(text).replace(/[^a-z]+/g, " ");
+  const words = normalized.split(/\s+/).filter((word) => word.length >= 4);
+  const distance = (a, b) => {
+    const row = Array.from({length:b.length + 1}, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+      let previous = row[0]; row[0] = i;
+      for (let j = 1; j <= b.length; j++) {
+        const saved = row[j];
+        row[j] = Math.min(row[j] + 1, row[j - 1] + 1, previous + (a[i - 1] === b[j - 1] ? 0 : 1));
+        previous = saved;
+      }
+    }
+    return row[b.length];
+  };
+  let best = null;
+  for (const pokemon of ALL_DEX) {
+    const name = cleanOcr(pokemon.nome).replace(/[^a-z]/g, "");
+    if (name.length < 4) continue;
+    for (const word of words) {
+      if (Math.abs(word.length - name.length) > 2) continue;
+      const score = distance(word, name);
+      const limit = name.length >= 8 ? 2 : 1;
+      if (score <= limit && (!best || score < best.score)) best = { pokemon, score };
+    }
+  }
+  return best?.pokemon;
 }
 const IV_FIELD_IDS = ["x-level", "x-qual", "x-power", "x-ivtotal", ...STAT_NAMES.map((_, i) => `o${i}`)];
 const IV_FIELD_LABELS = {

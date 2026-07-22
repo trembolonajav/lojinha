@@ -26,8 +26,6 @@
     await worker.setParameters({
       tessedit_pageseg_mode: parameters.psm,
       tessedit_char_whitelist: parameters.whitelist || "",
-      load_system_dawg: parameters.numeric ? "0" : "1",
-      load_freq_dawg: parameters.numeric ? "0" : "1",
       user_defined_dpi: "300"
     });
     let timer;
@@ -94,7 +92,7 @@
       }
       if (Math.max(longest, run) > canvas.width * .32) longGreenRows++;
     }
-    return longGreenRows >= 5 ? "bars" : "compact";
+    return longGreenRows >= 5 ? "my-pokes" : "inventory";
   }
 
   function compactGeometry(bitmap) {
@@ -113,7 +111,14 @@
     }
     const divider = rowScores.sort((a, b) => b.longest - a.longest)[0];
     const anchorY = divider && divider.longest > canvas.width * .55 ? divider.y : Math.round(canvas.height * .46);
-    const unit = Math.max(11, Math.round(canvas.height * .073));
+    /* A largura do tooltip e estavel; a altura varia quando existem instrucoes
+       no rodape. Usar a largura impede que esse rodape desloque os recortes. */
+    const referenceScale = canvas.width / 255;
+    const unit = 18 * referenceScale;
+    const headerY = 79 * referenceScale;
+    const statsY = 99 * referenceScale;
+    const secondStatsY = 120 * referenceScale;
+    const powerY = 139 * referenceScale;
     const box = (x, y, width, height) => ({
       x: Math.max(0, Math.round(x)), y: Math.max(0, Math.round(y)),
       width: Math.min(bitmap.width - Math.max(0, Math.round(x)), Math.max(1, Math.round(width))),
@@ -122,20 +127,22 @@
     return {
       card: box(0, 0, bitmap.width, bitmap.height),
       dividerY: anchorY,
-      name: box(0, Math.max(0, anchorY - unit * 5.2), bitmap.width * .62, unit * 1.65),
-      level: box(0, anchorY + 2, bitmap.width * .21, unit * 1.55),
-      quality: box(bitmap.width * .48, anchorY + 2, bitmap.width * .22, unit * 1.45),
-      iv: box(bitmap.width * .70, anchorY + 2, bitmap.width * .16, unit * 1.45),
-      ivLeft: box(bitmap.width * .63, anchorY + 1, bitmap.width * .29, unit * 1.8),
-      ivRight: box(bitmap.width * .755, anchorY + 2, bitmap.width * .13, unit * 1.45),
-      ivWide: box(bitmap.width * .62, anchorY, bitmap.width * .37, unit * 1.65),
-      hp: box(0, anchorY + unit * 1.35, bitmap.width / 3, unit * 1.45),
-      attack: box(bitmap.width / 3, anchorY + unit * 1.35, bitmap.width / 3, unit * 1.45),
-      defense: box(bitmap.width * 2 / 3, anchorY + unit * 1.35, bitmap.width / 3, unit * 1.45),
-      specialAttack: box(0, anchorY + unit * 2.55, bitmap.width / 3, unit * 1.5),
-      specialDefense: box(bitmap.width / 3, anchorY + unit * 2.55, bitmap.width / 3, unit * 1.5),
-      speed: box(bitmap.width * 2 / 3, anchorY + unit * 2.55, bitmap.width / 3, unit * 1.5),
-      power: box(0, anchorY + unit * 3.85, bitmap.width * .62, unit * 1.65)
+      name: box(4 * referenceScale, 5 * referenceScale, bitmap.width * .7, 28 * referenceScale),
+      header: box(3 * referenceScale, headerY, bitmap.width - 6 * referenceScale, 27 * referenceScale),
+      statsGrid: box(3 * referenceScale, statsY, bitmap.width - 6 * referenceScale, 48 * referenceScale),
+      level: box(3 * referenceScale, headerY, bitmap.width * .24, 25 * referenceScale),
+      quality: box(bitmap.width * .34, headerY, bitmap.width * .38, 25 * referenceScale),
+      iv: box(bitmap.width * .72, headerY, bitmap.width * .18, 25 * referenceScale),
+      ivLeft: box(bitmap.width * .65, headerY, bitmap.width * .28, 25 * referenceScale),
+      ivRight: box(bitmap.width * .77, headerY, bitmap.width * .14, 25 * referenceScale),
+      ivWide: box(bitmap.width * .64, headerY, bitmap.width * .35, 27 * referenceScale),
+      hp: box(3 * referenceScale, statsY, bitmap.width / 3, 25 * referenceScale),
+      attack: box(bitmap.width / 3, statsY, bitmap.width / 3, 25 * referenceScale),
+      defense: box(bitmap.width * 2 / 3, statsY, bitmap.width / 3, 25 * referenceScale),
+      specialAttack: box(3 * referenceScale, secondStatsY, bitmap.width / 3, 25 * referenceScale),
+      specialDefense: box(bitmap.width / 3, secondStatsY, bitmap.width / 3, 25 * referenceScale),
+      speed: box(bitmap.width * 2 / 3, secondStatsY, bitmap.width / 3, 25 * referenceScale),
+      power: box(3 * referenceScale, powerY, bitmap.width * .62, 27 * referenceScale)
     };
   }
 
@@ -152,16 +159,24 @@
     return value >= .8 && value <= 1.8 ? String(value) : "";
   }
   function parseIv(text) {
-    const normalized = String(text || "").replace(/[|lI!]/g, "1").replace(/[zZ]/g, "2");
-    const numbers = [...normalized.matchAll(/\d{1,3}/g)].map((m) => +m[0]).filter((n) => n >= 0 && n <= 192);
-    const current = numbers.find((n) => n >= 6 && n <= 192 && n !== 192);
-    if (current == null) return { current: "", maximum: "" };
-    return { current: String(current), maximum: numbers.includes(192) ? "192" : "192" };
+    const original = String(text || "");
+    const normalized = original
+      .replace(/\b(?:1V|lV|\|V|!V)\b/gi, "IV")
+      .replace(/[oO]/g, "0")
+      .replace(/\s+/g, " ")
+      .trim();
+    const labeled = normalized.match(/\bIV\s*[:\-]?\s*(\d{1,3})\s*(?:[\/|]\s*192|\s+192|192)\b/i);
+    const anchored = normalized.match(/\b(\d{1,3})\s*[\/|]\s*192\b/);
+    const isolated = !/\bIV\b/i.test(normalized) && normalized.match(/^\D*(\d{1,3})\D*$/);
+    const value = Number(labeled?.[1] || anchored?.[1] || isolated?.[1]);
+    if (!Number.isInteger(value) || value < 6 || value > 192) return { current: "", maximum: "" };
+    return { current: String(value), maximum: "192" };
   }
   function parseNamedInteger(text, labels, max = 99999999) {
     const normalized = clean(text).replace(/[oO]/g, "0").replace(/[iIl!|]/g, "1");
     const labeled = normalized.match(new RegExp(`(?:${labels.join("|")})[^0-9]{0,10}([0-9][0-9.,]*)`, "i"));
-    const value = digits(labeled?.[1] || normalized);
+    if (!labeled) return "";
+    const value = digits(labeled[1]);
     return value && +value > 0 && +value <= max ? String(+value) : "";
   }
 
@@ -183,6 +198,7 @@
         variants.push({ name: `binary-${threshold}`, smoothing: true, options: { threshold, invert: true } });
       }
     }
+    if (config.maxVariants) variants.splice(config.maxVariants);
     let best = field();
     let bestScore = -1;
     const candidates = new Map();
@@ -215,7 +231,7 @@
     return best;
   }
 
-  async function readCompact(paths, bitmap, onProgress) {
+  async function readCompactLegacy(paths, bitmap, onProgress) {
     const regions = compactGeometry(bitmap);
     const debug = [];
     const originalCanvas = canvasFrom(bitmap, regions.card, 1, true).canvas;
@@ -294,6 +310,113 @@
     return { result, regions, debug };
   }
 
+  async function readCompactGrouped(paths, bitmap, onProgress) {
+    const regions = compactGeometry(bitmap);
+    const debug = [];
+    const grouped = async (name, box, config, progress) => {
+      onProgress("Mapeando campos do card", progress);
+      const scale = Math.max(3, Math.min(6, Math.ceil(1200 / Math.max(box.width, 1))));
+      const drawn = canvasFrom(bitmap, box, scale, true);
+      enhance(drawn.canvas, { lo: 32, hi: 190, invert: true });
+      const data = await recognize(paths, await toBlob(addPadding(drawn.canvas, 18)), config);
+      debug.push({ region: name, box, variant: "grouped-contrast", raw: data.text || "", confidence: data.confidence });
+      return data;
+    };
+
+    /* O caminho comum usa quatro blocos. Recortes individuais sao usados
+       somente para recuperar valores que ficaram ausentes ou invalidos. */
+    const nameData = await grouped("name", regions.name, { psm: PSM.SINGLE_LINE }, .05);
+    const headerData = await grouped("header", regions.header, { psm: PSM.SINGLE_LINE }, .22);
+    const statsData = await grouped("statsGrid", regions.statsGrid, { psm: "6" }, .42);
+    const powerData = await grouped("power", regions.power, { psm: PSM.SINGLE_LINE }, .60);
+    const header = parseWholeCard(headerData.text || "");
+    const stats = parseWholeCard(statsData.text || "");
+    const power = parseWholeCard(powerData.text || "");
+    const make = (value, data, variant) => field(value, data.confidence, data.text, variant);
+    const result = {
+      name: make(String(nameData.text || "").trim().replace(/[^A-Za-zÀ-ÿ♀♂ '-]/g, ""), nameData, "grouped-name"),
+      level: make(header.level, headerData, "grouped-header"),
+      quality: make(header.quality, headerData, "grouped-header"),
+      iv: make(header.ivTotal, headerData, "grouped-header"),
+      power: make(power.power || parseNamedInteger(powerData.text, ["poder", "power"]), powerData, "grouped-power"),
+      hp: make(stats.stats[0], statsData, "grouped-stats"),
+      attack: make(stats.stats[1], statsData, "grouped-stats"),
+      defense: make(stats.stats[2], statsData, "grouped-stats"),
+      specialAttack: make(stats.stats[3], statsData, "grouped-stats"),
+      specialDefense: make(stats.stats[4], statsData, "grouped-stats"),
+      speed: make(stats.stats[5], statsData, "grouped-stats")
+    };
+    const configs = {
+      name: { psm: PSM.SINGLE_LINE, maxVariants: 2, parse: (t) => String(t || "").trim().replace(/[^A-Za-zÀ-ÿ♀♂ '-]/g, "") },
+      level: { psm: PSM.SINGLE_LINE, whitelist: "NvNIVELnivelvlL0123456789", numeric: true, maxVariants: 2, parse: parseLevel },
+      quality: { psm: PSM.SINGLE_WORD, whitelist: "xX.,0123456789", numeric: true, maxVariants: 3, parse: parseQuality },
+      iv: { psm: PSM.SINGLE_LINE, whitelist: "IViv/0123456789", numeric: true, tryAll: true, maxVariants: 5, score: (v, t, c) => (String(v).length === 3 ? 100 : 0) + (/192/.test(t) ? 50 : 0) + c, parse: (t) => parseIv(t).current },
+      hp: { psm: PSM.SINGLE_LINE, whitelist: "HP0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["hp"], 9999999) },
+      attack: { psm: PSM.SINGLE_LINE, whitelist: "AtkATK0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["atk"], 9999999) },
+      defense: { psm: PSM.SINGLE_LINE, whitelist: "DefDEF0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["def"], 9999999) },
+      specialAttack: { psm: PSM.SINGLE_LINE, whitelist: "SpA0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["spa"], 9999999) },
+      specialDefense: { psm: PSM.SINGLE_LINE, whitelist: "SpD0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["spd", "spb", "spo"], 9999999) },
+      speed: { psm: PSM.SINGLE_LINE, whitelist: "VelVEL0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["vel"], 9999999) },
+      power: { psm: PSM.SINGLE_LINE, whitelist: "PoderPOWERpoderpower.0123456789", numeric: true, maxVariants: 2, parse: (t) => parseNamedInteger(t, ["poder", "power"]) }
+    };
+    const names = Object.keys(configs);
+    const recovery = names.filter((name) => !result[name]?.value);
+    for (let i = 0; i < recovery.length; i++) {
+      const name = recovery[i];
+      onProgress(`Confirmando ${name === "iv" ? "IV" : "campos difíceis"}`, .65 + .3 * i / Math.max(1, recovery.length));
+      const region = name === "iv" ? regions.ivRight : regions[name];
+      result[name] = await readRegion(paths, bitmap, name, region, configs[name], debug);
+    }
+    if (!result.iv.value) {
+      result.iv = await readRegion(paths, bitmap, "ivWide", regions.ivWide, configs.iv, debug);
+    }
+    result.ivMaximum = field(result.iv.value ? "192" : "", result.iv.confidence, result.iv.raw, result.iv.variant);
+    return { result, regions, debug };
+  }
+
+  async function readCompact(paths, bitmap, onProgress) {
+    const regions = compactGeometry(bitmap);
+    const usefulHeight = Math.min(bitmap.height, regions.power.y + regions.power.height + Math.round(bitmap.width * .02));
+    const usefulCard = { x:0, y:0, width:bitmap.width, height:usefulHeight };
+    const scale = Math.max(4, Math.min(6, Math.ceil(1200 / Math.max(bitmap.width, 1))));
+    /* A primeira tentativa preserva as cores. O contraste binario apagava
+       partes cinzas/laranjas e transformava 24 em 2 em cards pequenos. */
+    const drawn = canvasFrom(bitmap, usefulCard, scale, true);
+    onProgress("Lendo o card", .08);
+    const data = await recognize(paths, await toBlob(addPadding(drawn.canvas, 20)), { psm:"6" });
+    const parsed = parseWholeCard(data.text || "");
+    const firstLine = String(data.text || "").split(/\r?\n/).map((line) => line.trim()).find(Boolean) || "";
+    const make = (value) => field(value, data.confidence, data.text, "whole-useful-card");
+    const result = {
+      name: make(firstLine.replace(/[^A-Za-zÀ-ÿ♀♂ '-]/g, "")),
+      level: make(parsed.level), quality: make(parsed.quality),
+      iv: make(parsed.ivTotal), ivMaximum: make(parsed.ivTotal ? "192" : ""),
+      power: make(parsed.power), hp: make(parsed.stats[0]), attack: make(parsed.stats[1]),
+      defense: make(parsed.stats[2]), specialAttack: make(parsed.stats[3]),
+      specialDefense: make(parsed.stats[4]), speed: make(parsed.stats[5])
+    };
+    const knownStatSum = [result.hp, result.attack, result.defense, result.specialAttack,
+      result.specialDefense, result.speed].reduce((sum, item) => sum + (+item.value || 0), 0);
+    if (+result.power.value > 0 && +result.power.value < knownStatSum * .8) {
+      result.power = field();
+    }
+    const complete = result.name.value && result.level.value && result.quality.value &&
+      result.iv.value && result.power.value && [result.hp, result.attack, result.defense,
+        result.specialAttack, result.specialDefense, result.speed].every((item) => item.value);
+    const initialDebug = [{ region:"usefulCard", box:usefulCard, variant:"whole-contrast", raw:data.text || "", confidence:data.confidence, normalized:parsed }];
+    if (complete) {
+      onProgress("Leitura concluída", 1);
+      return { result, regions:{ ...regions, usefulCard }, debug:initialDebug };
+    }
+    const fallback = await readCompactGrouped(paths, bitmap, onProgress);
+    for (const [name, item] of Object.entries(result)) {
+      if (item?.value) fallback.result[name] = item;
+    }
+    fallback.regions.usefulCard = usefulCard;
+    fallback.debug.unshift(...initialDebug);
+    return fallback;
+  }
+
   function parseWholeCard(text) {
     const normalized = clean(text);
     const lineInteger = (labels) => {
@@ -341,7 +464,7 @@
     try {
       const layout = detectLayout(bitmap);
       const source = bitmap;
-      const read = layout === "compact" ? await readCompact(paths, source, onProgress) : await readBars(paths, bitmap, file, onProgress);
+      const read = layout === "inventory" ? await readCompact(paths, source, onProgress) : await readBars(paths, bitmap, file, onProgress);
       const r = read.result;
       const fields = {
         level: r.level.value, quality: r.quality.value, power: r.power.value,

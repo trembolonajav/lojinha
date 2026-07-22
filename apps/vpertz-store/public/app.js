@@ -14,7 +14,25 @@ const isExternal = (url) => /^https?:\/\//i.test(url);
 const contactHref = (c) => (c.url && c.url.trim()) ? c.url : vpWaLink(CFG, CFG.msgNegociar);
 const targetAttr = (url) => isExternal(url) ? ' target="_blank" rel="noreferrer"' : "";
 
-/* ---------------------------------------------- botão "Negociar" do topo */
+/* ---------------------------------------------- navegação e ações do topo */
+document.querySelectorAll('.nav-links a[href="contato.html"]').forEach((link) => link.remove());
+document.querySelectorAll('a[href="contato.html"]').forEach((link) => {
+  if (link.textContent.trim() === "Contato") link.textContent = "Comunidade";
+});
+const headerCommunity = document.querySelector(".header-actions .btn-whats");
+if (headerCommunity) {
+  headerCommunity.removeAttribute("data-wa");
+  headerCommunity.removeAttribute("data-wa-message");
+  headerCommunity.removeAttribute("target");
+  headerCommunity.removeAttribute("rel");
+  headerCommunity.href = "contato.html";
+  headerCommunity.classList.remove("btn-whats");
+  headerCommunity.classList.add("btn-community");
+  if (location.pathname.endsWith("/contato.html")) headerCommunity.classList.add("active");
+  headerCommunity.innerHTML = "<span>Comunidade</span>";
+}
+
+/* ---------------------------------------------- botões diretos de WhatsApp */
 document.querySelectorAll("[data-wa]").forEach((a) => {
   a.href = vpWaLink(CFG, a.dataset.waMessage || CFG.msgNegociar);
   a.target = "_blank";
